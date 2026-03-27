@@ -1,0 +1,219 @@
+/**
+ * NotificationPanel.css
+ * Member 04 – Module D
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.np-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Navbar */
+.np-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(10px);
+}
+
+.np-nav-brand {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.np-nav-actions { display: flex; gap: 10px; }
+
+.np-btn-secondary {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.75);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.np-btn-secondary:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* Container */
+.np-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Header */
+.np-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.np-title {
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.np-count-badge {
+  background: rgba(99,102,241,0.3);
+  color: #a5b4fc;
+  border: 1px solid rgba(165,180,252,0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  padding: 3px 10px;
+  font-weight: 500;
+}
+
+.np-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.np-filter-tabs {
+  display: flex;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.np-filter-tabs .tab {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.np-filter-tabs .tab.active {
+  background: rgba(99,102,241,0.3);
+  color: #fff;
+}
+
+.np-btn-primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.np-btn-primary:hover { opacity: 0.9; }
+
+/* Empty state */
+.np-empty {
+  text-align: center;
+  color: rgba(255,255,255,0.45);
+  padding: 40px 0;
+}
+
+.np-empty-state {
+  text-align: center;
+  padding: 60px 0;
+  color: rgba(255,255,255,0.45);
+}
+
+.np-empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+/* List */
+.np-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+.np-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 18px;
+  transition: background 0.2s;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.np-item.unread {
+  border-color: rgba(99,102,241,0.4);
+  background: rgba(99,102,241,0.08);
+}
+
+.np-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.np-type-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #a5b4fc;
+}
+
+.np-date {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+}
+
+.np-message {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.np-item-actions { display: flex; gap: 8px; }
+
+.np-action-read, .np-action-dismiss {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s, color 0.2s;
+}
+
+.np-action-read {
+  color: #a5b4fc;
+  border-color: rgba(165,180,252,0.3);
+}
+
+.np-action-read:hover { background: rgba(165,180,252,0.15); color: #fff; }
+
+.np-action-dismiss { color: rgba(255,255,255,0.4); }
+
+.np-action-dismiss:hover {
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  border-color: rgba(239,68,68,0.3);
+}
