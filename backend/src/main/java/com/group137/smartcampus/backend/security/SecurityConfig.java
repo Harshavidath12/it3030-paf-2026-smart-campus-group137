@@ -16,6 +16,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -42,13 +44,20 @@ public class SecurityConfig {
     private String allowedOrigins;
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+            .requestMatchers("/api/auth/**")
+            .requestMatchers("/oauth2/**")
+            .requestMatchers("/login/oauth2/**");
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-            // Return 401 JSON instead of redirecting to a login page
+            
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setContentType("application/json");
@@ -57,26 +66,23 @@ public class SecurityConfig {
                             authException.getMessage() + "\"}");
                 })
             )
-
+            
             .authorizeHttpRequests(auth -> auth
-                // ── Public – no token required ──────────────────────────────────
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/oauth2/**").permitAll()
-                .requestMatchers("/login/oauth2/**").permitAll()
-                // ── Role management – Admin only ─────────────────────────────────
+                // Public API – explicitly permit first
+                .requestMatchers("/api/auth/**", "/error").permitAll()
+                .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+                
+                // Protected resources
                 .requestMatchers("/api/users/roles/**").hasRole("ADMIN")
                 .requestMatchers("/api/users/*/role").hasRole("ADMIN")
-                // ── Notifications – any authenticated user ───────────────────────
                 .requestMatchers("/api/notifications/**").authenticated()
-                // ── Everything else – requires authentication ────────────────────
                 .anyRequest().authenticated()
             )
-
-            // Google OAuth2 login (only triggered when /oauth2/authorization/google is visited)
+            
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(oAuth2SuccessHandler)
             )
-
+            
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
