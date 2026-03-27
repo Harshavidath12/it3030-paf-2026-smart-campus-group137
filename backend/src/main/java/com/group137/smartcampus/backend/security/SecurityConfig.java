@@ -1,5 +1,6 @@
 package com.group137.smartcampus.backend.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -46,25 +47,36 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+            // Return 401 JSON instead of redirecting to a login page
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setContentType("application/json");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"" +
+                            authException.getMessage() + "\"}");
+                })
+            )
+
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints
-                .requestMatchers(
-                        "/api/auth/register",
-                        "/api/auth/login",
-                        "/oauth2/**",
-                        "/login/oauth2/**"
-                ).permitAll()
-                // Role management – Admin only
+                // ── Public – no token required ──────────────────────────────────
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/oauth2/**").permitAll()
+                .requestMatchers("/login/oauth2/**").permitAll()
+                // ── Role management – Admin only ─────────────────────────────────
                 .requestMatchers("/api/users/roles/**").hasRole("ADMIN")
                 .requestMatchers("/api/users/*/role").hasRole("ADMIN")
-                // Notifications – any authenticated user
+                // ── Notifications – any authenticated user ───────────────────────
                 .requestMatchers("/api/notifications/**").authenticated()
-                // Everything else requires authentication
+                // ── Everything else – requires authentication ────────────────────
                 .anyRequest().authenticated()
             )
+
+            // Google OAuth2 login (only triggered when /oauth2/authorization/google is visited)
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(oAuth2SuccessHandler)
             )
+
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
