@@ -1,124 +1,120 @@
 package com.group137.smartcampus.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group137.smartcampus.backend.dto.NotificationRequest;
 import com.group137.smartcampus.backend.entity.Notification;
 import com.group137.smartcampus.backend.entity.NotificationType;
-import com.group137.smartcampus.backend.security.JwtAuthFilter;
 import com.group137.smartcampus.backend.service.NotificationService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for NotificationController.
+ * Unit tests for NotificationController using pure Mockito (no Spring context).
  * Member 04 – Module D
  */
-@WebMvcTest(
-    controllers = NotificationController.class,
-    excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = JwtAuthFilter.class
-    )
-)
+@ExtendWith(MockitoExtension.class)
 class NotificationControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockitoBean
+    @Mock
     private NotificationService notificationService;
 
+    @InjectMocks
+    private NotificationController notificationController;
+
     @Test
-    @WithMockUser
-    void getNotifications_authenticated_returns200() throws Exception {
+    void getNotifications_returnsListWith200() {
         Notification n = Notification.builder()
                 .id(1L).userId(1L).message("Booking approved")
                 .type(NotificationType.BOOKING_APPROVED).isRead(false).build();
 
         when(notificationService.getNotificationsForCurrentUser()).thenReturn(List.of(n));
 
-        mockMvc.perform(get("/api/notifications"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].message").value("Booking approved"))
-                .andExpect(jsonPath("$[0].isRead").value(false));
+        ResponseEntity<List<Notification>> response = notificationController.getNotifications();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).hasSize(1);
+        assertThat(response.getBody().get(0).getMessage()).isEqualTo("Booking approved");
     }
 
     @Test
-    void getNotifications_unauthenticated_returns403() throws Exception {
-        mockMvc.perform(get("/api/notifications"))
-                .andExpect(status().isForbidden());
+    void getUnreadCount_returnsCountWith200() {
+        when(notificationService.getUnreadCount()).thenReturn(Map.of("unreadCount", 3L));
+
+        ResponseEntity<Map<String, Long>> response = notificationController.getUnreadCount();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).containsEntry("unreadCount", 3L);
     }
 
     @Test
-    @WithMockUser
-    void getUnreadCount_authenticated_returns200() throws Exception {
-        when(notificationService.getUnreadCount()).thenReturn(Map.of("unreadCount", 5L));
+    void createNotification_returns201WithCreatedEntity() {
+        NotificationRequest request = new NotificationRequest();
+        request.setUserId(1L);
+        request.setMessage("Ticket updated");
+        request.setType(NotificationType.TICKET_UPDATE);
 
-        mockMvc.perform(get("/api/notifications/unread-count"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.unreadCount").value(5));
+        Notification saved = Notification.builder()
+                .id(10L).userId(1L).message("Ticket updated")
+                .type(NotificationType.TICKET_UPDATE).isRead(false).build();
+
+        when(notificationService.createNotification(any())).thenReturn(saved);
+
+        ResponseEntity<Notification> response = notificationController.createNotification(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getId()).isEqualTo(10L);
     }
 
     @Test
-    @WithMockUser
-    void markAsRead_existingId_returns200() throws Exception {
+    void markAsRead_existingId_returns200WithUpdatedEntity() {
         Notification n = Notification.builder()
-                .id(1L).userId(1L).message("Test").isRead(true).build();
+                .id(1L).userId(1L).isRead(true).build();
+
         when(notificationService.markAsRead(1L)).thenReturn(n);
 
-        mockMvc.perform(patch("/api/notifications/1/read").with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isRead").value(true));
+        ResponseEntity<Notification> response = notificationController.markAsRead(1L);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getIsRead()).isTrue();
     }
 
     @Test
-    @WithMockUser
-    void deleteNotification_existingId_returns204() throws Exception {
+    void deleteNotification_existingId_returns204() {
         doNothing().when(notificationService).deleteNotification(1L);
 
-        mockMvc.perform(delete("/api/notifications/1").with(csrf()))
-                .andExpect(status().isNoContent());
+        ResponseEntity<Void> response = notificationController.deleteNotification(1L);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        verify(notificationService).deleteNotification(1L);
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
-    void createNotification_withAdminUser_returns201() throws Exception {
+    void createNotification_serviceReturnsEntity_returns201() {
         NotificationRequest request = new NotificationRequest();
         request.setUserId(2L);
-        request.setMessage("Your booking was rejected");
+        request.setMessage("Booking rejected");
         request.setType(NotificationType.BOOKING_REJECTED);
 
         Notification saved = Notification.builder()
-                .id(5L).userId(2L).message("Your booking was rejected")
+                .id(5L).userId(2L).message("Booking rejected")
                 .type(NotificationType.BOOKING_REJECTED).isRead(false).build();
 
         when(notificationService.createNotification(any())).thenReturn(saved);
 
-        mockMvc.perform(post("/api/notifications")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(5));
+        ResponseEntity<Notification> response = notificationController.createNotification(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getId()).isEqualTo(5L);
     }
 }

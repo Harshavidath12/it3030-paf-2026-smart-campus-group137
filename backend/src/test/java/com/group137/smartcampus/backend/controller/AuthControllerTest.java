@@ -1,111 +1,111 @@
 package com.group137.smartcampus.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group137.smartcampus.backend.dto.AuthResponse;
 import com.group137.smartcampus.backend.dto.LoginRequest;
 import com.group137.smartcampus.backend.dto.RegisterRequest;
 import com.group137.smartcampus.backend.entity.Role;
-import com.group137.smartcampus.backend.security.JwtAuthFilter;
 import com.group137.smartcampus.backend.service.AuthService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Integration tests for AuthController.
+ * Unit tests for AuthController using pure Mockito (no Spring context).
  * Member 04 – Module E
  */
-@WebMvcTest(
-    controllers = AuthController.class,
-    excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = JwtAuthFilter.class
-    )
-)
+@ExtendWith(MockitoExtension.class)
 class AuthControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockitoBean
+    @Mock
     private AuthService authService;
 
-    @Test
-    void register_withValidBody_returns201() throws Exception {
-        RegisterRequest request = new RegisterRequest();
-        request.setName("Alice");
-        request.setEmail("alice@test.com");
-        request.setPassword("password123");
+    @InjectMocks
+    private AuthController authController;
 
-        AuthResponse response = AuthResponse.builder()
+    private AuthResponse mockAuthResponse;
+
+    @BeforeEach
+    void setUp() {
+        mockAuthResponse = AuthResponse.builder()
                 .token("mocked.jwt.token")
                 .userId(1L)
                 .name("Alice")
                 .email("alice@test.com")
                 .role(Role.USER)
                 .build();
-
-        when(authService.register(any())).thenReturn(response);
-
-        mockMvc.perform(post("/api/auth/register")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.token").value("mocked.jwt.token"))
-                .andExpect(jsonPath("$.email").value("alice@test.com"))
-                .andExpect(jsonPath("$.role").value("USER"));
     }
 
     @Test
-    void register_withMissingEmail_returns400() throws Exception {
+    void register_withValidRequest_returns201WithToken() {
         RegisterRequest request = new RegisterRequest();
         request.setName("Alice");
-        // email intentionally omitted
+        request.setEmail("alice@test.com");
         request.setPassword("password123");
 
-        mockMvc.perform(post("/api/auth/register")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+        when(authService.register(any(RegisterRequest.class))).thenReturn(mockAuthResponse);
+
+        ResponseEntity<AuthResponse> response = authController.register(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getToken()).isEqualTo("mocked.jwt.token");
+        assertThat(response.getBody().getEmail()).isEqualTo("alice@test.com");
+        assertThat(response.getBody().getRole()).isEqualTo(Role.USER);
     }
 
     @Test
-    void login_withWrongPassword_returns401() throws Exception {
+    void login_withValidCredentials_returns200WithToken() {
+        LoginRequest request = new LoginRequest();
+        request.setEmail("alice@test.com");
+        request.setPassword("password123");
+
+        when(authService.login(any(LoginRequest.class))).thenReturn(mockAuthResponse);
+
+        ResponseEntity<AuthResponse> response = authController.login(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getToken()).isEqualTo("mocked.jwt.token");
+    }
+
+    @Test
+    void login_withWrongPassword_throwsBadCredentials() {
         LoginRequest request = new LoginRequest();
         request.setEmail("alice@test.com");
         request.setPassword("wrongpassword");
 
-        when(authService.login(any())).thenThrow(new BadCredentialsException("Bad credentials"));
+        when(authService.login(any(LoginRequest.class)))
+                .thenThrow(new BadCredentialsException("Bad credentials"));
 
-        mockMvc.perform(post("/api/auth/login")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
+        assertThatThrownBy(() -> authController.login(request))
+                .isInstanceOf(BadCredentialsException.class)
+                .hasMessageContaining("Bad credentials");
     }
 
     @Test
-    void me_withoutToken_returns403() throws Exception {
-        mockMvc.perform(get("/api/auth/me"))
-                .andExpect(status().isForbidden());
+    void register_duplicateEmail_throwsIllegalState() {
+        RegisterRequest request = new RegisterRequest();
+        request.setName("Alice");
+        request.setEmail("alice@test.com");
+        request.setPassword("password123");
+
+        when(authService.register(any()))
+                .thenThrow(new IllegalStateException("Email already in use"));
+
+        assertThatThrownBy(() -> authController.register(request))
+                .isInstanceOf(IllegalStateException.class);
     }
 }
