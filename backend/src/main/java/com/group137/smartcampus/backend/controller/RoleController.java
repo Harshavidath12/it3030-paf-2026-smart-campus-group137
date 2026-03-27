@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +30,14 @@ public class RoleController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> getAllUsersWithRoles() {
         List<Map<String, Object>> result = userService.getAllUsers().stream()
-                .map(u -> Map.of(
-                        "id",    u.getId(),
-                        "name",  u.getName(),
-                        "email", u.getEmail(),
-                        "role",  u.getRole().name()
-                ))
+                .map(u -> {
+                    Map<String, Object> entry = new HashMap<>();
+                    entry.put("id",    u.getId());
+                    entry.put("name",  u.getName());
+                    entry.put("email", u.getEmail());
+                    entry.put("role",  u.getRole().name());
+                    return entry;
+                })
                 .toList();
         return ResponseEntity.ok(result);
     }
@@ -47,10 +50,11 @@ public class RoleController {
 
         Role newRole = Role.valueOf(body.get("role").toUpperCase());
         User updated = userService.updateRole(id, newRole);
-        return ResponseEntity.ok(Map.of(
-                "id",   updated.getId(),
-                "email", updated.getEmail(),
-                "role",  updated.getRole().name()
-        ));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id",    updated.getId());
+        response.put("email", updated.getEmail());
+        response.put("role",  updated.getRole().name());
+        return ResponseEntity.ok(response);
     }
 }
