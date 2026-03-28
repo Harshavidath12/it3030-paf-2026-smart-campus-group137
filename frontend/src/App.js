@@ -12,22 +12,7 @@ import OAuthCallbackPage  from './pages/OAuthCallbackPage';
 import NotificationPanel  from './pages/NotificationPanel';
 import ProtectedRoute     from './components/ProtectedRoute';
 
-/** Placeholder home page – other team members will fill this in */
-const HomePage = () => (
-  <div style={{
-    display: 'flex', flexDirection: 'column', alignItems: 'center',
-    justifyContent: 'center', minHeight: '100vh',
-    background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)',
-    color: '#fff', fontFamily: 'Inter, sans-serif', gap: 16
-  }}>
-    <h1>🏛️ Smart Campus</h1>
-    <p style={{ color: 'rgba(255,255,255,0.6)' }}>Operations Hub – Welcome!</p>
-    <a href="/notifications"
-       style={{ color: '#a5b4fc', textDecoration: 'none', fontSize: '0.9rem' }}>
-      🔔 View Notifications
-    </a>
-  </div>
-);
+import HomePage           from './pages/HomePage';
 
 function App() {
   return (

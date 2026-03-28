@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String profilePicture;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default

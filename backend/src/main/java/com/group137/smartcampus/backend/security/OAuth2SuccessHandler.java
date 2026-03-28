@@ -37,13 +37,21 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String email = oAuth2User.getAttribute("email");
         String name  = oAuth2User.getAttribute("name");
+        String picture = oAuth2User.getAttribute("picture");
 
-        // Create the user if they don't exist yet
-        User user = userRepository.findByEmail(email).orElseGet(() ->
+        // Create the user if they don't exist yet, or update their picture if they do
+        User user = userRepository.findByEmail(email).map(existingUser -> {
+            if (picture != null && !picture.equals(existingUser.getProfilePicture())) {
+                existingUser.setProfilePicture(picture);
+                return userRepository.save(existingUser);
+            }
+            return existingUser;
+        }).orElseGet(() ->
                 userRepository.save(
                         User.builder()
                                 .email(email)
                                 .name(name)
+                                .profilePicture(picture)
                                 .role(Role.USER)
                                 .provider(AuthProvider.GOOGLE)
                                 .createdAt(LocalDateTime.now())

@@ -49,6 +49,27 @@ public class AuthController {
         body.put("name",  user.getName());
         body.put("email", user.getEmail());
         body.put("role",  user.getRole());
+        body.put("profilePicture", user.getProfilePicture());
         return ResponseEntity.ok(body);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalState(IllegalStateException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Bad Request");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleAll(Exception ex) {
+        ex.printStackTrace();
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Internal Server Error");
+        body.put("message", ex.getClass().getName() + ": " + ex.getMessage());
+        if (ex.getCause() != null) {
+            body.put("cause", ex.getCause().getClass().getName() + ": " + ex.getCause().getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 }
