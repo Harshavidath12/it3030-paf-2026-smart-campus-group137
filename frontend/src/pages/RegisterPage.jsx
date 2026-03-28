@@ -28,7 +28,7 @@ const RegisterPage = () => {
     setLoading(true);
     try {
       await register(form.name, form.email, form.password);
-      navigate('/');
+      navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {

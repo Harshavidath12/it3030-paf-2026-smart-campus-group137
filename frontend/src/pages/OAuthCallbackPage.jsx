@@ -20,8 +20,12 @@ const OAuthCallbackPage = () => {
       saveToken(token);
       navigate('/', { replace: true });
     } else {
-      // Something went wrong with OAuth flow
-      navigate('/login', { replace: true });
+      // Prevent StrictMode double-render bug from booting them out if they already saved the token
+      if (!localStorage.getItem('smartcampus_token')) {
+        navigate('/login', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     }
   }, [navigate]);
 

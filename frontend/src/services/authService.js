@@ -6,15 +6,15 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/auth';
+const API_URL = 'http://localhost:8084/api/auth';
 const TOKEN_KEY = 'smartcampus_token';
 
 // ── Token helpers ──────────────────────────────────────────
 
 export const saveToken = (token) => localStorage.setItem(TOKEN_KEY, token);
-export const getToken  = ()      => localStorage.getItem(TOKEN_KEY);
-export const removeToken = ()    => localStorage.removeItem(TOKEN_KEY);
-export const isLoggedIn  = ()    => !!getToken();
+export const getToken = () => localStorage.getItem(TOKEN_KEY);
+export const removeToken = () => localStorage.removeItem(TOKEN_KEY);
+export const isLoggedIn = () => !!getToken();
 
 // ── Auth header helper ─────────────────────────────────────
 
@@ -33,7 +33,7 @@ export const authHeader = () => ({
  */
 export const register = async (name, email, password) => {
   const res = await axios.post(`${API_URL}/register`, { name, email, password });
-  saveToken(res.data.token);
+  // Token is deliberately not saved here so the user has to login manually
   return res.data;
 };
 
@@ -64,5 +64,5 @@ export const logout = () => removeToken();
  * Trigger Google OAuth2 login – redirects to Spring Boot OAuth flow.
  */
 export const loginWithGoogle = () => {
-  window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  window.location.href = 'http://localhost:8084/oauth2/authorization/google';
 };
