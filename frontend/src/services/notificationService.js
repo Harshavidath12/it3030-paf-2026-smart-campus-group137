@@ -7,7 +7,7 @@
 import axios from 'axios';
 import { authHeader } from './authService';
 
-const API_URL = 'http://localhost:8080/api/notifications';
+const API_URL = 'http://localhost:8084/api/notifications';
 
 /** Get all notifications for the current user (newest first). */
 export const getNotifications = async () => {
