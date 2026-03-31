@@ -14,25 +14,27 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 6px;
+  color: var(--text-header);
+  padding: 8px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s, background 0.2s;
+  transition: all 0.2s;
+  opacity: 0.85;
 }
 
 .bell-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
 }
 
 .badge {
   position: absolute;
   top: 0;
   right: 0;
-  background: #ef4444;
+  background: var(--accent);
   color: #fff;
   font-size: 0.65rem;
   font-weight: 700;
@@ -43,8 +45,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #1e1b4b;
-  animation: popIn 0.25s ease;
+  border: 2px solid #312e81; /* Matches bg-gradient-header */
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popIn {
