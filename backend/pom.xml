@@ -15,7 +15,7 @@
 	<description>Smart Campus Operations Hub – Group 137</description>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>23</java.version>
 	</properties>
 
 	<dependencies>
