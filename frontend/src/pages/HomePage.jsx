@@ -30,8 +30,8 @@ const HomePage = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)',
-      color: '#fff',
+      background: 'var(--bg-gradient)',
+      color: 'var(--text-main)',
       fontFamily: 'Inter, sans-serif'
     }}>
       {/* Navigation Bar */}
@@ -40,11 +40,12 @@ const HomePage = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '1rem 2rem',
-        background: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        background: 'var(--bg-gradient-header)',
+        color: 'var(--text-header)',
+        borderBottom: '1px solid var(--border-color)',
+        boxShadow: 'var(--shadow-md)'
       }}>
-        <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
           🏛️ Smart Campus
         </div>
 
@@ -58,7 +59,7 @@ const HomePage = () => {
             <>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                 <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>{user.name || 'User'}</span>
-                <span style={{ fontSize: '0.75rem', color: '#a5b4fc' }}>Signed in</span>
+                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>Signed in</span>
               </div>
               <div style={{
                 width: '40px',
@@ -68,7 +69,8 @@ const HomePage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                boxShadow: 'var(--shadow-sm)'
               }}>
                 {/* Google or generic Profile Icon */}
                 <img 
@@ -80,20 +82,25 @@ const HomePage = () => {
               <button 
                 onClick={handleLogout}
                 style={{
-                  background: 'none',
-                  border: '1px solid rgba(255,255,255,0.3)',
-                  color: '#fff',
-                  padding: '6px 12px',
-                  borderRadius: '6px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: 'var(--text-header)',
+                  padding: '6px 14px',
+                  borderRadius: '8px',
                   cursor: 'pointer',
-                  fontSize: '0.8rem',
-                  marginLeft: '10px'
-                }}>
+                  fontSize: '0.85rem',
+                  marginLeft: '10px',
+                  fontWeight: '500',
+                  transition: 'background 0.2s'
+                }}
+                onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+              >
                 Logout
               </button>
             </>
           ) : (
-            <span>Loading profile...</span>
+            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Loading profile...</span>
           )}
         </div>
       </nav>
@@ -104,30 +111,41 @@ const HomePage = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: '10vh',
+        paddingTop: '15vh',
         gap: '20px'
       }}>
-        <h1>Welcome to the Operations Hub!</h1>
-        <p style={{ color: 'rgba(255,255,255,0.7)', maxWidth: '600px', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '10px' }}>Welcome to the Operations Hub!</h1>
+        <p style={{ color: 'var(--text-muted)', maxWidth: '600px', textAlign: 'center', fontSize: '1.1rem', lineHeight: '1.6' }}>
           You have successfully authenticated via Google. This is the main dashboard for the Smart Campus system.
         </p>
         
         <button 
           onClick={() => navigate('/notifications')}
           style={{
-            marginTop: '20px',
-            background: '#6366f1',
+            marginTop: '30px',
+            background: 'var(--primary-gradient)',
             color: '#fff',
             border: 'none',
-            padding: '12px 24px',
-            borderRadius: '8px',
+            padding: '14px 28px',
+            borderRadius: '12px',
             fontSize: '1rem',
+            fontWeight: '600',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
-          }}>
+            gap: '10px',
+            boxShadow: 'var(--shadow-md)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+          }}
+        >
           <span>🔔</span> View Notifications
         </button>
       </main>
