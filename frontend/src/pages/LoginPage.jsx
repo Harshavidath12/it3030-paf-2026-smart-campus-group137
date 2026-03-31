@@ -23,8 +23,14 @@ const LoginPage = () => {
     setError('');
     setLoading(true);
     try {
-      await login(form.email, form.password);
-      navigate('/');
+      const userData = await login(form.email, form.password);
+      if (userData.role === 'ADMIN') {
+        navigate('/admin-dashboard');
+      } else if (userData.role === 'TECHNICIAN' || userData.role === 'MANAGER') {
+        navigate('/technician-dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password.');
     } finally {
