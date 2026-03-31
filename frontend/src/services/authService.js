@@ -66,3 +66,27 @@ export const logout = () => removeToken();
 export const loginWithGoogle = () => {
   window.location.href = 'http://localhost:8084/oauth2/authorization/google';
 };
+
+/**
+ * Fetch all users (Admin only)
+ */
+export const getAllUsers = async () => {
+  const res = await axios.get(`http://localhost:8084/api/users/roles`, authHeader());
+  return res.data;
+};
+
+/**
+ * Admin: Create a user and immediately assign a specific role.
+ */
+export const adminCreateUser = async (name, email, password, role) => {
+  const regRes = await axios.post(`${API_URL}/register`, { name, email, password });
+  const newUserId = regRes.data.userId;
+  
+  const roleRes = await axios.put(
+    `http://localhost:8084/api/users/${newUserId}/role`,
+    { role },
+    authHeader()
+  );
+  return roleRes.data;
+};
+
