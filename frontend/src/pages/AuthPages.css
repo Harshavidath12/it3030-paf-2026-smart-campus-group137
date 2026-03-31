@@ -107,7 +107,8 @@
   font-weight: 600;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -120,11 +121,13 @@
   box-shadow: var(--shadow-sm);
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder,
+.form-group select::placeholder {
   color: #94a3b8;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
