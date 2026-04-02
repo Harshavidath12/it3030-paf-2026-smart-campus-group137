@@ -120,7 +120,7 @@ const QRCodeScanner = () => {
             <Box sx={{ mb: 3 }}>
                 <QrIcon sx={{ fontSize: 52, color: '#4f46e5', mb: 1 }} />
                 <Typography variant="h5" fontWeight="900" color="#0f172a">
-                    Check-in Kiosk
+                    Check-in 
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     Use your camera or upload a QR image

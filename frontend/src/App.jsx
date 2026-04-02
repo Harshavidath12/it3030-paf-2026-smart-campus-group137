@@ -41,7 +41,7 @@ const NavBar = () => {
           New Booking
         </Button>
         <Button sx={navButtonStyle('/admin/bookings')} onClick={() => navigate('/admin/bookings')}>
-          Admin Dashboard
+          Booking Management
         </Button>
         <Button sx={navButtonStyle('/scanner')} onClick={() => navigate('/scanner')}>
           QR Check-in

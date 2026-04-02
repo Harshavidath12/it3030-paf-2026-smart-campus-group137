@@ -37,9 +37,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-            "http://localhost:5173",  // Pinned Vite dev server
-            "http://localhost:3000",
+        config.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173", 
+            "http://localhost:5174",
+            "http://localhost:5175",
+            "http://localhost:3000", 
             "http://localhost:3001"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
