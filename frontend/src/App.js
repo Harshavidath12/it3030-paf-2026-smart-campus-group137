@@ -13,6 +13,8 @@ import NotificationPanel  from './pages/NotificationPanel';
 import ProtectedRoute     from './components/ProtectedRoute';
 
 import HomePage           from './pages/HomePage';
+import AdminDashboard     from './pages/AdminDashboard';
+import TechnicianDashboard from './pages/TechnicianDashboard';
 
 function App() {
   return (
@@ -40,6 +42,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/technician-dashboard"
+          element={
+            <ProtectedRoute>
+              <TechnicianDashboard />
+            </ProtectedRoute>
+          }
+        />
+
 
         {/* ── Fallback ── */}
         <Route path="*" element={<Navigate to="/" replace />} />
