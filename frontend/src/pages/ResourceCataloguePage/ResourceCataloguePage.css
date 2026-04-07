@@ -1,0 +1,100 @@
+/* ResourceCataloguePage.css */
+
+.catalogue-container {
+  @apply min-h-screen py-10 px-4 sm:px-6 lg:px-8;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #0f172a;
+  font-family: 'Inter', sans-serif;
+}
+
+.catalogue-header {
+  @apply mb-10 text-center;
+}
+
+.catalogue-title {
+  @apply text-4xl font-black tracking-tight;
+  background: linear-gradient(to right, #1e1b4b, #312e81);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.catalogue-subtitle {
+  @apply mt-3 text-lg text-gray-500 max-w-2xl mx-auto;
+}
+
+.filters-section {
+  @apply max-w-4xl mx-auto mb-10 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row gap-4;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.filter-input {
+  @apply flex-1 p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+}
+
+.filter-select {
+  @apply p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white;
+}
+
+.resources-grid {
+  @apply max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8;
+}
+
+.resource-card {
+  @apply rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden flex flex-col h-full;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.resource-card::before {
+  content: '';
+  @apply absolute top-0 left-0 w-full h-1 transform scale-x-0 transition-transform duration-300 origin-left;
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+}
+
+.resource-card:hover::before {
+  @apply scale-x-100;
+}
+
+.resource-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mb-4;
+}
+
+.badge-active {
+  @apply text-white border border-transparent;
+  background: #f59e0b; /* Accent Color (Energy Amber) */
+}
+
+.badge-inactive {
+  @apply text-white;
+  background: #0f172a; /* Main Text color mapped to inactive */
+}
+
+.resource-name {
+  @apply text-xl font-bold mb-2 truncate;
+  color: #0f172a;
+}
+
+.resource-detail {
+  @apply flex items-center text-sm text-gray-500 mb-2;
+}
+
+.resource-detail svg {
+  @apply w-4 h-4 mr-2 text-gray-400 flex-shrink-0;
+}
+
+.empty-state {
+  @apply text-center py-20 px-4;
+}
+
+.empty-state-title {
+  @apply text-2xl font-bold text-gray-800 mb-2;
+}
+
+.empty-state-desc {
+  @apply text-gray-500 max-w-md mx-auto;
+}

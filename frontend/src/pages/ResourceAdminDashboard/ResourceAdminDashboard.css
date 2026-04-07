@@ -1,0 +1,99 @@
+/* ResourceAdminDashboard.css */
+
+.dashboard-container {
+  @apply min-h-screen p-6 sm:p-10;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #0f172a;
+  font-family: 'Inter', sans-serif;
+}
+
+.dashboard-header {
+  @apply flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4;
+}
+
+.dashboard-title {
+  @apply text-3xl font-bold tracking-tight;
+  color: #0f172a;
+}
+
+.dashboard-subtitle {
+  @apply mt-1;
+  color: #334155; /* Slightly lighter slate */
+}
+
+.btn-primary {
+  @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors cursor-pointer hover:opacity-90;
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+}
+
+.btn-secondary {
+  @apply inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors cursor-pointer;
+  color: #0f172a;
+}
+
+.btn-danger {
+  @apply inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors;
+}
+
+.table-container {
+  @apply shadow-sm ring-1 ring-gray-200 sm:rounded-2xl overflow-hidden;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.data-table {
+  @apply min-w-full divide-y divide-gray-200 bg-transparent;
+}
+
+.data-table th {
+  @apply px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider;
+  color: #334155;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.data-table td {
+  @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+}
+
+.action-link {
+  @apply text-blue-600 hover:text-blue-900 font-medium mr-4 transition-colors cursor-pointer;
+}
+
+/* Modal styles using Tailwind */
+.modal-overlay {
+  @apply fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity z-40 flex items-center justify-center p-4;
+}
+
+.modal-content {
+  @apply rounded-2xl shadow-xl transform transition-all w-full max-w-lg p-6 z-50;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.modal-title {
+  @apply text-xl font-semibold mb-6;
+  color: #0f172a;
+}
+
+.form-group {
+  @apply mb-4;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+.form-input {
+  @apply block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2.5 border outline-none;
+}
+
+.form-select {
+  @apply block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2.5 border outline-none bg-white;
+}
+
+.modal-actions {
+  @apply mt-8 flex justify-end gap-3;
+}
