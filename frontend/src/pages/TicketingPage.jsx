@@ -21,6 +21,8 @@ const TicketingPage = () => {
   const [resource, setResource] = useState(RESOURCES[0]);
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('LOW');
+  const [contactNumber, setContactNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [image, setImage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
@@ -62,19 +64,35 @@ const TicketingPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
     setSubmitMessage('');
+
+    // Frontend Validations
+    if (!/^[0-9]{10}$/.test(contactNumber)) {
+      setSubmitMessage('Failed: Contact number must be exactly 10 digits.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setSubmitMessage('Failed: Please enter a valid email address.');
+      return;
+    }
+
+    setSubmitting(true);
     try {
       const newTicket = await createTicket({
         resourceName: resource,
         description: description,
         priority: priority,
+        contactNumber: contactNumber,
+        email: email,
         imageBase64: image
       });
       // Reset form
       setResource(RESOURCES[0]);
       setDescription('');
       setPriority('LOW');
+      setContactNumber('');
+      setEmail('');
       setImage(null);
       // reset file input
       const fileInput = document.getElementById('ticket-image-upload');
@@ -193,6 +211,35 @@ const TicketingPage = () => {
                 placeholder="Describe the issue... (e.g., The projector bulb is burnt out)"
                 style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', resize: 'vertical' }}
               />
+            </div>
+
+            <div style={{ display: 'flex', gap: '15px' }}>
+              <div style={{ flex: 1 }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '0.9rem' }}>Contact Number</label>
+                <input 
+                  type="tel"
+                  required
+                  maxLength={10}
+                  value={contactNumber}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    setContactNumber(val);
+                  }}
+                  placeholder="0712345678"
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '0.9rem' }}>Email</label>
+                <input 
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="student@example.com"
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}
+                />
+              </div>
             </div>
 
             <div>

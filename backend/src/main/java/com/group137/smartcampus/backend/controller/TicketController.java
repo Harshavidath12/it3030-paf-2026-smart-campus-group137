@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketResponse> createTicket(@RequestBody TicketRequest request) {
+    public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketRequest request) {
         return ResponseEntity.ok(ticketService.createTicket(request));
     }
 
@@ -40,5 +41,12 @@ public class TicketController {
             @PathVariable Long id,
             @RequestBody TicketUpdateRequest request) {
         return ResponseEntity.ok(ticketService.updateTicket(id, request));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        java.io.StringWriter sw = new java.io.StringWriter();
+        e.printStackTrace(new java.io.PrintWriter(sw));
+        return ResponseEntity.status(500).body(e.getMessage() + "\n" + sw.toString());
     }
 }

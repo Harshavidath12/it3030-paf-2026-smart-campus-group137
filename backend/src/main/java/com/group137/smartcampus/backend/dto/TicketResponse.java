@@ -15,6 +15,8 @@ public class TicketResponse {
     private String description;
     private TicketPriority priority;
     private TicketStatus status;
+    private String contactNumber;
+    private String email;
     private String imageBase64;
     private Long creatorId;
     private String creatorName;

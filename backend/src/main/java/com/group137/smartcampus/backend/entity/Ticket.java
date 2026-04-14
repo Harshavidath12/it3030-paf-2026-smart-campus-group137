@@ -26,6 +26,12 @@ public class Ticket {
     @Column(nullable = false, length = 1000)
     private String description;
 
+    @Column
+    private String contactNumber;
+
+    @Column
+    private String email;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
@@ -36,8 +42,7 @@ public class Ticket {
     @Builder.Default
     private TicketStatus status = TicketStatus.OPEN;
 
-    @Lob
-    @Column(columnDefinition="LONGTEXT")
+    @Column(columnDefinition="TEXT")
     private String imageBase64;
 
     @Column(nullable = false)
