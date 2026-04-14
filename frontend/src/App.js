@@ -16,6 +16,11 @@ import HomePage           from './pages/HomePage';
 import AdminDashboard     from './pages/AdminDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 
+// Member 1: Facilities & Assets Catalogue
+import ResourceDiscoveryPage from './pages/resource/ResourceDiscoveryPage';
+import ResourceDetailPage    from './pages/resource/ResourceDetailPage';
+import AdminResourceDashboard from './pages/resource/AdminResourceDashboard';
+
 function App() {
   return (
     <Router>
@@ -57,6 +62,20 @@ function App() {
               <TechnicianDashboard />
             </ProtectedRoute>
           }
+        />
+
+        {/* Member 1: Facilities & Assets Routes */}
+        <Route 
+          path="/resources" 
+          element={<ProtectedRoute><ResourceDiscoveryPage /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/resources/:id" 
+          element={<ProtectedRoute><ResourceDetailPage /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/resources" 
+          element={<ProtectedRoute><AdminResourceDashboard /></ProtectedRoute>} 
         />
 
 

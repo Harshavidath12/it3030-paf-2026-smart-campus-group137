@@ -119,35 +119,48 @@ const HomePage = () => {
           You have successfully authenticated via Google. This is the main dashboard for the Smart Campus system.
         </p>
         
-        <button 
-          onClick={() => navigate('/notifications')}
-          style={{
-            marginTop: '30px',
-            background: 'var(--primary-gradient)',
-            color: '#fff',
-            border: 'none',
-            padding: '14px 28px',
-            borderRadius: '12px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            boxShadow: 'var(--shadow-md)',
-            transition: 'all 0.2s ease'
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-          }}
-        >
-          <span>🔔</span> View Notifications
-        </button>
+        <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
+          <button 
+            onClick={() => navigate('/resources')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: '#fff',
+              border: 'none',
+              padding: '14px 28px',
+              borderRadius: '12px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              boxShadow: 'var(--shadow-md)',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span>🔍</span> Explore Catalogue
+          </button>
+
+          <button 
+            onClick={() => navigate('/notifications')}
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              color: 'var(--text-main)',
+              border: '1px solid var(--border-color)',
+              padding: '14px 28px',
+              borderRadius: '12px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span>🔔</span> View Notifications
+          </button>
+        </div>
       </main>
     </div>
   );
