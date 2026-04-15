@@ -69,7 +69,15 @@ const NotificationPanel = () => {
     <div className="np-page">
       {/* Minimal navbar */}
       <nav className="np-nav">
-        <span className="np-nav-brand">🏛️ Smart Campus</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <span className="np-nav-brand">🏛️ Smart Campus</span>
+          <span 
+            onClick={() => navigate('/contact')}
+            className="nav-link-text"
+          >
+            Contact Us
+          </span>
+        </div>
         <div className="np-nav-actions">
           <button className="np-btn-secondary" onClick={() => navigate('/')}>← Home</button>
           <button className="np-btn-secondary" onClick={() => { logout(); navigate('/login'); }}>

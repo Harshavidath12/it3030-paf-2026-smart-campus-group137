@@ -45,8 +45,16 @@ const HomePage = () => {
         borderBottom: '1px solid var(--border-color)',
         boxShadow: 'var(--shadow-md)'
       }}>
-        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
-          🏛️ Smart Campus
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
+            🏛️ Smart Campus
+          </div>
+          <span 
+            onClick={() => navigate('/contact')}
+            className="nav-link-text"
+          >
+            Contact Us
+          </span>
         </div>
 
         {/* Profile Section - Top Right */}
