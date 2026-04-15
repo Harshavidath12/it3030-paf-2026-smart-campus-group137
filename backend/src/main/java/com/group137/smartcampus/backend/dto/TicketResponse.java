@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class TicketResponse {
     private TicketStatus status;
     private String contactNumber;
     private String email;
-    private String imageBase64;
+    private List<String> imagesBase64;
     private Long creatorId;
     private String creatorName;
     private Long assigneeId;

@@ -43,6 +43,12 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.updateTicket(id, request));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+        ticketService.deleteTicket(id);
+        return ResponseEntity.ok().build();
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
         java.io.StringWriter sw = new java.io.StringWriter();

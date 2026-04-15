@@ -23,7 +23,7 @@ const TicketingPage = () => {
   const [priority, setPriority] = useState('LOW');
   const [contactNumber, setContactNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
@@ -47,6 +47,11 @@ const TicketingPage = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (images.length >= 3) {
+        alert("You can only upload up to 3 images.");
+        e.target.value = '';
+        return;
+      }
       if (file.size > 2 * 1024 * 1024) {
         alert("Image must be smaller than 2MB");
         e.target.value = '';
@@ -54,12 +59,15 @@ const TicketingPage = () => {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result); // Base64
+        setImages((prev) => [...prev, reader.result]);
+        e.target.value = ''; // reset so same file can be selected again if needed
       };
       reader.readAsDataURL(file);
-    } else {
-      setImage(null);
     }
+  };
+
+  const removeImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -85,7 +93,7 @@ const TicketingPage = () => {
         priority: priority,
         contactNumber: contactNumber,
         email: email,
-        imageBase64: image
+        imagesBase64: images.length > 0 ? images : null
       });
       // Reset form
       setResource(RESOURCES[0]);
@@ -93,7 +101,7 @@ const TicketingPage = () => {
       setPriority('LOW');
       setContactNumber('');
       setEmail('');
-      setImage(null);
+      setImages([]);
       // reset file input
       const fileInput = document.getElementById('ticket-image-upload');
       if (fileInput) fileInput.value = '';
@@ -282,17 +290,35 @@ const TicketingPage = () => {
             </div>
 
             <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '0.9rem' }}>Optional Image</label>
-              <input 
-                id="ticket-image-upload"
-                type="file" 
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ width: '100%', padding: '8px', fontSize: '0.85rem' }}
-              />
-              {image && (
-                <div style={{ marginTop: '10px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
-                  <img src={image} alt="Preview" style={{ width: '100%', display: 'block', maxHeight: '150px', objectFit: 'cover' }} />
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '0.9rem' }}>Optional Pictures (Up to 3)</label>
+              {images.length < 3 && (
+                <input 
+                  id="ticket-image-upload"
+                  type="file" 
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ width: '100%', padding: '8px', fontSize: '0.85rem' }}
+                />
+              )}
+              {images.length > 0 && (
+                <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
+                  {images.map((img, index) => (
+                    <div key={index} style={{ position: 'relative', width: '120px', height: '120px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+                      <img src={img} alt={`Preview ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <button 
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        style={{
+                          position: 'absolute', top: '5px', right: '5px',
+                          background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none',
+                          borderRadius: '50%', width: '24px', height: '24px',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          cursor: 'pointer', fontSize: '12px', fontWeight: 'bold'
+                        }}>
+                        X
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

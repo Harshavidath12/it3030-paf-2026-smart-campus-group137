@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tickets")
@@ -42,8 +44,11 @@ public class Ticket {
     @Builder.Default
     private TicketStatus status = TicketStatus.OPEN;
 
-    @Column(columnDefinition="TEXT")
-    private String imageBase64;
+    @ElementCollection
+    @CollectionTable(name = "ticket_images", joinColumns = @JoinColumn(name = "ticket_id"))
+    @Column(name = "image_base64", columnDefinition="TEXT")
+    @Builder.Default
+    private List<String> imagesBase64 = new ArrayList<>();
 
     @Column(nullable = false)
     private Long creatorId;

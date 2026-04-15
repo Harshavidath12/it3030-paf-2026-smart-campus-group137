@@ -22,3 +22,8 @@ export const updateTicket = async (id, updateData) => {
   const response = await axios.put(`${API_URL}/${id}`, updateData, authHeader());
   return response.data;
 };
+
+export const deleteTicket = async (id) => {
+  const response = await axios.delete(`${API_URL}/${id}`, authHeader());
+  return response.data;
+};

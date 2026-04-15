@@ -35,19 +35,11 @@ public class TicketService {
                 .contactNumber(request.getContactNumber())
                 .email(request.getEmail())
                 .status(TicketStatus.OPEN)
-                .imageBase64(request.getImageBase64())
+                .imagesBase64(request.getImagesBase64())
                 .creatorId(currentUser.getId())
                 .build();
 
         Ticket savedTicket = ticketRepository.save(ticket);
-
-        // Notify Creator
-        NotificationRequest notifReq = new NotificationRequest();
-        notifReq.setUserId(currentUser.getId());
-        notifReq.setMessage("Your ticket for " + savedTicket.getResourceName() + " has been successfully submitted.");
-        notifReq.setType(NotificationType.TICKET_UPDATE);
-        notifReq.setReferenceId(savedTicket.getId());
-        notificationService.createNotification(notifReq);
         
         return mapToResponse(savedTicket);
     }
@@ -98,6 +90,18 @@ public class TicketService {
         return mapToResponse(ticketRepository.save(ticket));
     }
 
+    public void deleteTicket(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+        
+        User currentUser = getCurrentUser();
+        if (!ticket.getCreatorId().equals(currentUser.getId())) {
+            throw new IllegalArgumentException("You do not have permission to delete this ticket");
+        }
+        
+        ticketRepository.delete(ticket);
+    }
+
     private User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
@@ -121,7 +125,7 @@ public class TicketService {
                 .contactNumber(ticket.getContactNumber())
                 .email(ticket.getEmail())
                 .status(ticket.getStatus())
-                .imageBase64(ticket.getImageBase64())
+                .imagesBase64(ticket.getImagesBase64())
                 .creatorId(ticket.getCreatorId())
                 .creatorName(creatorName)
                 .assigneeId(ticket.getAssigneeId())

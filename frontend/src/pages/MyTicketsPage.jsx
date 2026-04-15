@@ -1,33 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMyTickets } from '../services/ticketService';
+import { getMyTickets, deleteTicket } from '../services/ticketService';
 import { logout } from '../services/authService';
-const DUMMY_TICKETS = [
-  {
-    id: 1001,
-    resourceName: 'Projector #3',
-    description: 'The projector in Room A101 is not turning on. It keeps flashing a red light.',
-    priority: 'HIGH',
-    status: 'OPEN',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 1002,
-    resourceName: 'Network Switch D',
-    description: 'Intermittent connection issues observed during the afternoon.',
-    priority: 'MEDIUM',
-    status: 'IN_PROGRESS',
-    createdAt: new Date(Date.now() - 86400000).toISOString()
-  },
-  {
-    id: 1003,
-    resourceName: 'Lab 1',
-    description: 'Air conditioning unit is leaking water.',
-    priority: 'LOW',
-    status: 'RESOLVED',
-    createdAt: new Date(Date.now() - 172800000).toISOString()
-  }
-];
 
 const MyTicketsPage = () => {
   const navigate = useNavigate();
@@ -38,15 +12,13 @@ const MyTicketsPage = () => {
     const fetchTickets = async () => {
       try {
         const data = await getMyTickets();
-        setTickets([...(data || []), ...DUMMY_TICKETS]);
+        setTickets(data || []);
       } catch (err) {
         if (err.response && err.response.status === 401) {
           logout();
           navigate('/login');
         } else {
           console.error("Failed to fetch tickets:", err);
-          // If backend fails, ensure dummy tickets still load
-          setTickets(DUMMY_TICKETS);
         }
       } finally {
         setLoading(false);
@@ -54,6 +26,18 @@ const MyTicketsPage = () => {
     };
     fetchTickets();
   }, [navigate]);
+
+  const handleDelete = async (ticketId) => {
+    if (window.confirm("Are you sure you want to delete this ticket?")) {
+      try {
+        await deleteTicket(ticketId);
+        setTickets(tickets.filter(t => t.id !== ticketId));
+      } catch (err) {
+        console.error("Failed to delete ticket:", err);
+        alert("Failed to delete ticket. Please try again.");
+      }
+    }
+  };
 
   const statusColor = (status) => {
     switch (status) {
@@ -181,19 +165,43 @@ const MyTicketsPage = () => {
                     {ticket.description}
                   </p>
                   
-                  {ticket.imageBase64 && (
+                  {ticket.imagesBase64 && ticket.imagesBase64.length > 0 && (
                     <div style={{ marginTop: '10px' }}>
                       <button 
                         onClick={(e) => {
-                          const img = e.currentTarget.nextSibling;
-                          img.style.display = img.style.display === 'none' ? 'block' : 'none';
+                          const container = e.currentTarget.nextSibling;
+                          container.style.display = container.style.display === 'none' ? 'flex' : 'none';
                         }}
                         style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', padding: 0, fontSize: '0.85rem', fontWeight: '500' }}>
-                        Toggle Image Attachment
+                        Toggle Image Attachments ({ticket.imagesBase64.length})
                       </button>
-                      <img src={ticket.imageBase64} alt="Attached to ticket" style={{ display: 'none', marginTop: '10px', maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '1px solid var(--border-color)' }} />
+                      <div style={{ display: 'none', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
+                        {ticket.imagesBase64.map((img, idx) => (
+                          <img key={idx} src={img} alt={`Attached to ticket ${idx + 1}`} style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '1px solid var(--border-color)', objectFit: 'contain' }} />
+                        ))}
+                      </div>
                     </div>
                   )}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                    <button 
+                      onClick={() => handleDelete(ticket.id)}
+                      style={{
+                        background: 'rgba(239, 68, 68, 0.15)',
+                        color: '#ef4444',
+                        border: 'none',
+                        padding: '6px 14px',
+                        borderRadius: '20px',
+                        fontSize: '0.8rem',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseOver={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.3)'}
+                      onMouseOut={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.15)'}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
