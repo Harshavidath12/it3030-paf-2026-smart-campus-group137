@@ -7,6 +7,7 @@ import com.group137.smartcampus.backend.model.Booking;
 import com.group137.smartcampus.backend.model.BookingStatus;
 import com.group137.smartcampus.backend.repository.BookingRepository;
 import com.group137.smartcampus.backend.service.BookingService;
+import com.group137.smartcampus.backend.service.NotificationService;
 import com.group137.smartcampus.backend.service.QRCodeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,11 +29,13 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final QRCodeService qrCodeService;
+    private final NotificationService notificationService;
 
     // Constructor injection (no @Autowired needed with single constructor)
-    public BookingServiceImpl(BookingRepository bookingRepository, QRCodeService qrCodeService) {
+    public BookingServiceImpl(BookingRepository bookingRepository, QRCodeService qrCodeService, NotificationService notificationService) {
         this.bookingRepository = bookingRepository;
         this.qrCodeService = qrCodeService;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -134,10 +137,38 @@ public class BookingServiceImpl implements BookingService {
             booking.setApprovedBy(adminId);
             booking.setApprovedAt(LocalDateTime.now());
             booking.setQrCodeData(UUID.randomUUID().toString());
+
+            // Notify user of approval
+            try {
+                Long targetUserId = Long.parseLong(booking.getUserId());
+                NotificationRequest notifReq = new NotificationRequest();
+                notifReq.setUserId(targetUserId);
+                notifReq.setMessage("Your booking for resource " + booking.getResourceId() + " has been APPROVED.");
+                notifReq.setType(com.group137.smartcampus.backend.entity.NotificationType.BOOKING_APPROVED);
+                notifReq.setReferenceId(booking.getId());
+                notificationService.createNotification(notifReq);
+            } catch (NumberFormatException e) {
+                // Ignore if userId is not a number (e.g. "user123")
+                System.out.println("Could not send notification: userId is not a number (" + booking.getUserId() + ")");
+            }
         } else {
             booking.setStatus(BookingStatus.REJECTED);
             booking.setRejectionReason(reviewRequest.getRemarks());
             booking.setAdminRemarks(reviewRequest.getRemarks());
+
+            // Notify user of rejection
+            try {
+                Long targetUserId = Long.parseLong(booking.getUserId());
+                NotificationRequest notifReq = new NotificationRequest();
+                notifReq.setUserId(targetUserId);
+                notifReq.setMessage("Your booking for resource " + booking.getResourceId() + " has been REJECTED. Reason: " + reviewRequest.getRemarks());
+                notifReq.setType(com.group137.smartcampus.backend.entity.NotificationType.BOOKING_REJECTED);
+                notifReq.setReferenceId(booking.getId());
+                notificationService.createNotification(notifReq);
+            } catch (NumberFormatException e) {
+                // Ignore if userId is not a number
+                System.out.println("Could not send notification: userId is not a number (" + booking.getUserId() + ")");
+            }
         }
 
         return mapToDTO(bookingRepository.save(booking));

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMe, logout } from '../services/authService';
+import NotificationBell from '../components/NotificationBell';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -101,6 +102,7 @@ const HomePage = () => {
                 <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>{user.name || 'User'}</span>
                 <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>Signed in</span>
               </div>
+              <NotificationBell />
               <div
                 style={{
                   width: '40px',
@@ -189,20 +191,6 @@ const HomePage = () => {
             }}
           >
             Booking Facility
-          </button>
-          <button
-            onClick={() => navigate('/notifications')}
-            style={primaryButtonStyle}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-          >
-            View Notifications
           </button>
         </div>
       </main>

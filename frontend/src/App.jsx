@@ -21,6 +21,7 @@ import TicketingPage from './pages/TicketingPage';
 import MyTicketsPage from './pages/MyTicketsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { getStoredUser, isLoggedIn, logout } from './services/authService';
+import NotificationBell from './components/NotificationBell';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ const NavBar = () => {
         <Button sx={navButtonStyle('/scanner')} onClick={() => navigate('/scanner')}>
           QR Check-in
         </Button>
+        <NotificationBell />
         <Button sx={{ ml: 1, color: 'rgba(255,255,255,0.8)' }} onClick={handleLogout}>
           Logout
         </Button>
