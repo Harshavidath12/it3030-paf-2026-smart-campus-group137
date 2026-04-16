@@ -19,8 +19,8 @@ public class ResourceService {
         return resourceRepository.findAll();
     }
 
-    public List<Resource> search(String type, String location, Integer minCapacity) {
-        return resourceRepository.searchResources(type, location, minCapacity);
+    public List<Resource> search(String type, String building, String floor, Integer minCapacity) {
+        return resourceRepository.searchResources(type, building, floor, minCapacity);
     }
 
     public Optional<Resource> getResourceById(Long id) {
@@ -38,7 +38,9 @@ public class ResourceService {
                     resource.setType(updatedData.getType());
                     resource.setCategory(updatedData.getCategory());
                     resource.setCapacity(updatedData.getCapacity());
-                    resource.setLocation(updatedData.getLocation());
+                    resource.setBuilding(updatedData.getBuilding());
+                    resource.setFloor(updatedData.getFloor());
+                    resource.setRoomNumber(updatedData.getRoomNumber());
                     resource.setStatus(updatedData.getStatus());
                     resource.setDescription(updatedData.getDescription());
                     resource.setMetadata(updatedData.getMetadata());

@@ -24,11 +24,12 @@ public class ResourceController {
     @GetMapping
     public ResponseEntity<List<Resource>> getAllResources(
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String building,
+            @RequestParam(required = false) String floor,
             @RequestParam(required = false) Integer minCapacity) {
         
-        if (type != null || location != null || minCapacity != null) {
-            return ResponseEntity.ok(resourceService.search(type, location, minCapacity));
+        if (type != null || building != null || floor != null || minCapacity != null) {
+            return ResponseEntity.ok(resourceService.search(type, building, floor, minCapacity));
         }
         return ResponseEntity.ok(resourceService.getAllResources());
     }

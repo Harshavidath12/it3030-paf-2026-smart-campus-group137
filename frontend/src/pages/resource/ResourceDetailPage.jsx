@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getResourceById } from '../../services/resourceService';
+import FacilityImage from '../../components/FacilityImage';
 import './ResourceDiscoveryPage.css';
 
 const ResourceDetailPage = () => {
@@ -63,13 +64,7 @@ const ResourceDetailPage = () => {
         boxShadow: '0 30px 80px rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.01)',
         display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '60px'
       }}>
-        <div style={{
-          background: '#f8fafc', borderRadius: '30px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', 
-          fontSize: '12rem', height: '400px'
-        }}>
-           {getEmoji(resource.type)}
-        </div>
+        <FacilityImage res={resource} fallbackEmoji={getEmoji(resource.type)} />
 
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <span className={`badge-round ${resource.status === 'ACTIVE' ? 'badge-active' : 'badge-out'}`} style={{width: 'fit-content'}}>
@@ -78,7 +73,7 @@ const ResourceDetailPage = () => {
           <h1 style={{fontSize: '4.5rem', margin: '20px 0', fontWeight: '800', color: 'var(--accent-purple)', letterSpacing: '-3px'}}>{resource.name}</h1>
           
           <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', color: '#636e72', fontSize: '1.2rem', marginBottom: '40px'}}>
-            <div>🏢 <strong>Location:</strong><br/>{resource.location}</div>
+            <div>🏢 <strong>Location:</strong><br/>{resource.building}, {resource.floor} - {resource.roomNumber}</div>
             <div>📁 <strong>Type:</strong><br/>{resource.type}</div>
             <div>👥 <strong>Capacity:</strong><br/>{resource.capacity} Seats</div>
             <div>🏷️ <strong>Category:</strong><br/>{resource.category}</div>

@@ -63,6 +63,7 @@ public class SecurityConfig {
                 // Public API – explicitly permit first
                 .requestMatchers("/api/auth/**", "/error").permitAll()
                 .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/resources/**").permitAll()
                 
                 // Protected resources
                 .requestMatchers("/api/users/roles/**").hasRole("ADMIN")

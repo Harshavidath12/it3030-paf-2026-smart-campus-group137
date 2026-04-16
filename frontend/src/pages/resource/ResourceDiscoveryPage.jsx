@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllResources } from '../../services/resourceService';
 import { getMe } from '../../services/authService';
+import FacilityImage from '../../components/FacilityImage';
 import './ResourceDiscoveryPage.css';
 
 const ResourceDiscoveryPage = () => {
@@ -12,9 +13,12 @@ const ResourceDiscoveryPage = () => {
   
   const [filters, setFilters] = useState({
     type: '',
-    location: '',
+    building: '',
+    floor: '',
     minCapacity: ''
   });
+
+  const [activeSidebar, setActiveSidebar] = useState('All');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,13 +51,18 @@ const ResourceDiscoveryPage = () => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleSidebarClick = (building) => {
+    setActiveSidebar(building);
+    setFilters(prev => ({ ...prev, building: building === 'All' ? '' : building }));
+  };
+
   const getVisualClass = (index) => {
     const classes = ['visual-orange', 'visual-blue', 'visual-purple', 'visual-green'];
     return classes[index % classes.length];
   };
 
   const getEmoji = (type) => {
-    const t = type.toLowerCase();
+    const t = type?.toLowerCase() || '';
     if (t.includes('hall') || t.includes('auditorium')) return '🏛️';
     if (t.includes('lab') || t.includes('laboratory')) return '🧪';
     if (t.includes('projector')) return '📽️';
@@ -64,64 +73,142 @@ const ResourceDiscoveryPage = () => {
   };
 
   return (
-    <div className="discovery-wrapper">
-      <header className="header-row">
-        <div className="title-area">
-          <h1>University Facilities</h1>
-          <p>Discover best-in-class labs, halls, and specialized equipment. Check availability and coordinate your campus workflow.</p>
+    <div className="app-container">
+      {/* Premium Sidebar Component */}
+      <aside className="campus-sidebar">
+        <div className="sidebar-brand">
+          <div className="brand-logo">CS</div>
+          <h2>CAMPUS RESOURCE</h2>
         </div>
-        
-        {user?.role === 'ADMIN' && (
-          <button className="add-resource-btn" onClick={() => navigate('/admin/resources')}>
-            <span>+</span> Add Resource
+        <nav className="sidebar-menu">
+          <div className="menu-label">Navigation</div>
+          <button 
+            className={`menu-item ${activeSidebar === 'All' ? 'active' : ''}`}
+            onClick={() => handleSidebarClick('All')}
+          >
+            <span className="item-icon">🏫</span>
+            All Resources
           </button>
-        )}
-      </header>
+          
+          <div className="menu-label">Buildings</div>
+          <button 
+            className={`menu-item ${activeSidebar === 'Main Building' ? 'active' : ''}`}
+            onClick={() => handleSidebarClick('Main Building')}
+          >
+            <span className="item-icon">🏛️</span>
+            Main Building
+          </button>
+          <button 
+            className={`menu-item ${activeSidebar === 'New Building' ? 'active' : ''}`}
+            onClick={() => handleSidebarClick('New Building')}
+          >
+            <span className="item-icon">🏗️</span>
+            New Building
+          </button>
+        </nav>
+      </aside>
 
-      <div className="search-bar-row">
-        <div style={{ fontSize: '1.5rem' }}>🔍</div>
-        <div className="search-input-group">
-          <input name="type" placeholder="Search Facility Type" value={filters.type} onChange={handleFilterChange} />
-          <input name="location" placeholder="Location" value={filters.location} onChange={handleFilterChange} />
-          <input type="number" name="minCapacity" placeholder="Min Capacity" value={filters.minCapacity} onChange={handleFilterChange} />
-        </div>
-        <button style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>⚙️</button>
-      </div>
-
-      {loading ? (
-        <p style={{ textAlign: 'center', margin: '100px 0', fontSize: '1.2rem', fontWeight: 'bold' }}>Loading Assets...</p>
-      ) : (
-        <div className="facilities-grid">
-          {resources.length === 0 ? (
-            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '100px' }}>
-              <h2>Empty Search Results</h2>
-              <p>No resources match your current selection.</p>
-            </div>
-          ) : (
-            resources.map((res, index) => (
-              <div key={res.id} className="facility-card" onClick={() => navigate(`/resources/${res.id}`)}>
-                <div className={`card-visual ${getVisualClass(index)}`}>
-                  {getEmoji(res.type)}
-                </div>
-                <div className="card-info">
-                  <h3>{res.name}</h3>
-                  <div className="card-meta">
-                    <div>📍 {res.location}</div>
-                    <div>📁 {res.type}</div>
-                    {res.capacity > 0 && <div>👥 {res.capacity} Seats</div>}
-                  </div>
-                  <div className="status-row">
-                    <span className={`badge-round ${res.status === 'ACTIVE' ? 'badge-active' : 'badge-out'}`}>
-                       {res.status === 'ACTIVE' ? 'AVAILABLE' : 'MAINTENANCE'}
-                    </span>
-                    <span style={{ color: '#dfe6e9', fontWeight: 'bold', fontSize: '0.8rem' }}>#0{res.id}</span>
-                  </div>
-                </div>
-              </div>
-            ))
+      {/* Main Content Area */}
+      <main className="main-content-wrapper">
+        <header className="page-header">
+          <div className="title-content">
+            <h1>Discovery Hub</h1>
+            <p>Managing {resources.length}+ high-fidelity facilities across his campus.</p>
+          </div>
+          
+          {user?.role === 'ADMIN' && (
+            <button className="premium-add-btn" onClick={() => navigate('/admin/resources')}>
+              <span>+</span> Register New
+            </button>
           )}
+        </header>
+
+        <div className="smart-search-zone">
+          <div className="search-input-box">
+            <span className="search-box-icon">🔍</span>
+            <input 
+              name="type" 
+              placeholder="Search specific rooms (e.g. Lab 401)" 
+              value={filters.type} 
+              onChange={handleFilterChange} 
+            />
+          </div>
+          <div className="fast-filters">
+            <select name="type" className="premium-select" value={filters.type} onChange={handleFilterChange}>
+              <option value="">All Types</option>
+              <option value="Lecture Hall">Lecture Hall</option>
+              <option value="Laboratory">Laboratory</option>
+              <option value="Meeting Room">Meeting Room</option>
+            </select>
+            <select name="floor" className="premium-select" value={filters.floor} onChange={handleFilterChange}>
+              <option value="">Any Floor</option>
+              <option value="Basement">Basement</option>
+              <option value="Level 1">Level 1</option>
+              <option value="Level 2">Level 2</option>
+              <option value="3rd Floor">3rd Floor</option>
+              <option value="4th Floor">4th Floor</option>
+            </select>
+            <button className="reset-btn" onClick={() => setFilters({type:'', building:'', floor:'', minCapacity:''})}>🔄</button>
+          </div>
         </div>
-      )}
+
+        {loading ? (
+          <div className="loader-box">
+            <div className="pulse-loader"></div>
+            <p>Syncing Infrastructure...</p>
+          </div>
+        ) : (
+          <div className="resources-grid">
+            {resources.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">📂</div>
+                <h2>Zero Results Found</h2>
+                <p>We couldn't find any resources matching those specific criteria.</p>
+                <button className="reset-action" onClick={() => setFilters({type:'', building:'', floor:'', minCapacity:''})}>Clear All Filters</button>
+              </div>
+            ) : (
+              resources.map((res, index) => (
+                <div key={res.id} className="resource-premium-card" onClick={() => navigate(`/resources/${res.id}`)}>
+                  <FacilityImage 
+                    res={res} 
+                    fallbackEmoji={getEmoji(res.type)} 
+                    bgClass={getVisualClass(index)} 
+                  />
+                  <div className="card-body">
+                    <h3>{res.name}</h3>
+                    <div className="info-rows">
+                      <div className="info-row">
+                        <span className="row-label">🏢 Building:</span>
+                        <span className="row-value">{res.building}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="row-label">🧱 Floor:</span>
+                        <span className="row-value">{res.floor}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="row-label">🔖 Room:</span>
+                        <span className="row-value">{res.roomNumber}</span>
+                      </div>
+                      {res.capacity > 0 && (
+                        <div className="info-row">
+                          <span className="row-label">👥 Capacity:</span>
+                          <span className="row-value">{res.capacity} Seats</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="card-footer">
+                      <span className={`status-pill ${res.status === 'ACTIVE' ? 'available' : 'booked'}`}>
+                         {res.status === 'ACTIVE' ? '🟢 AVAILABLE' : '🔴 BOOKED'}
+                      </span>
+                      <span className="resource-id">#ID-{res.id}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
 };
