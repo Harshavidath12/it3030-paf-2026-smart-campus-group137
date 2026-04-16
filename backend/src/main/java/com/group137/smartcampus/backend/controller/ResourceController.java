@@ -26,10 +26,11 @@ public class ResourceController {
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String building,
             @RequestParam(required = false) String floor,
+            @RequestParam(required = false) ResourceStatus status,
             @RequestParam(required = false) Integer minCapacity) {
         
-        if (type != null || building != null || floor != null || minCapacity != null) {
-            return ResponseEntity.ok(resourceService.search(type, building, floor, minCapacity));
+        if (type != null || building != null || floor != null || status != null || minCapacity != null) {
+            return ResponseEntity.ok(resourceService.search(type, building, floor, status, minCapacity));
         }
         return ResponseEntity.ok(resourceService.getAllResources());
     }

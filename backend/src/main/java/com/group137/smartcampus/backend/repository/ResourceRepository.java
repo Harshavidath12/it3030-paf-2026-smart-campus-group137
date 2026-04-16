@@ -21,9 +21,11 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
            "(:type IS NULL OR LOWER(r.type) LIKE LOWER(CONCAT('%', :type, '%'))) AND " +
            "(:building IS NULL OR LOWER(r.building) LIKE LOWER(CONCAT('%', :building, '%'))) AND " +
            "(:floor IS NULL OR LOWER(r.floor) LIKE LOWER(CONCAT('%', :floor, '%'))) AND " +
+           "(:status IS NULL OR r.status = :status) AND " +
            "(:minCapacity IS NULL OR r.capacity >= :minCapacity)")
     List<Resource> searchResources(@Param("type") String type,
                                    @Param("building") String building,
                                    @Param("floor") String floor,
+                                   @Param("status") ResourceStatus status,
                                    @Param("minCapacity") Integer minCapacity);
 }

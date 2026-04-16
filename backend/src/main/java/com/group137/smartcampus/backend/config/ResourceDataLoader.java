@@ -47,77 +47,235 @@ public class ResourceDataLoader implements CommandLineRunner {
                 .description("Advanced computing lab with high-end workstations.")
                 .build();
 
-        Resource r3 = Resource.builder()
-                .name("Sony Laser Projector")
-                .type("Projector")
-                .category(ResourceCategory.ASSET)
-                .capacity(0)
-                .building("Main Building")
-                .floor("Ground Floor")
-                .roomNumber("Unit B")
-                .status(ResourceStatus.ACTIVE)
-                .description("Portable 4K laser projector.")
-                .build();
 
-        Resource r4 = Resource.builder()
-                .name("Room E204")
-                .type("Tutorial Room")
+
+
+
+        Resource r9 = Resource.builder()
+                .name("Computer Lab A301")
+                .type("Computer Lab")
                 .category(ResourceCategory.FACILITY)
                 .capacity(30)
                 .building("New Building")
-                .floor("Level 2")
-                .roomNumber("Room 204")
+                .floor("Level 3")
+                .roomNumber("A301")
                 .status(ResourceStatus.ACTIVE)
                 .build();
 
-        Resource r5 = Resource.builder()
-                .name("Board Room 01")
+        Resource r10 = Resource.builder()
+                .name("Computer Lab A401")
+                .type("Computer Lab")
+                .category(ResourceCategory.FACILITY)
+                .capacity(40)
+                .building("New Building")
+                .floor("Level 4")
+                .roomNumber("A401")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r11 = Resource.builder()
+                .name("Computer Lab A506")
+                .type("Computer Lab")
+                .category(ResourceCategory.FACILITY)
+                .capacity(50)
+                .building("New Building")
+                .floor("Level 5")
+                .roomNumber("A506")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r12 = Resource.builder()
+                .name("Computer Lab F305")
+                .type("Computer Lab")
+                .category(ResourceCategory.FACILITY)
+                .capacity(30)
+                .building("New Building")
+                .floor("Level 3")
+                .roomNumber("F305")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r13 = Resource.builder()
+                .name("Computer Lab B405")
+                .type("Computer Lab")
+                .category(ResourceCategory.FACILITY)
+                .capacity(60)
+                .building("New Building")
+                .floor("Level 4")
+                .roomNumber("B405")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r14 = Resource.builder()
+                .name("Computer Lab G601")
+                .type("Computer Lab")
+                .category(ResourceCategory.FACILITY)
+                .capacity(40)
+                .building("New Building")
+                .floor("Level 6")
+                .roomNumber("G601")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r15 = Resource.builder()
+                .name("Computer Lab G604")
+                .type("Computer Lab")
+                .category(ResourceCategory.FACILITY)
+                .capacity(60)
+                .building("New Building")
+                .floor("Level 6")
+                .roomNumber("G604")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r16 = Resource.builder()
+                .name("Main Library")
+                .type("Library")
+                .category(ResourceCategory.FACILITY)
+                .capacity(300)
+                .building("New Building")
+                .floor("Level 1")
+                .roomNumber("L101")
+                .status(ResourceStatus.ACTIVE)
+                .description("Main campus library with extensive study areas.")
+                .build();
+
+        Resource r17 = Resource.builder()
+                .name("Meeting Room 1")
                 .type("Meeting Room")
                 .category(ResourceCategory.FACILITY)
-                .capacity(8)
-                .building("New Building")
-                .floor("3rd Floor")
-                .roomNumber("Room 305")
+                .capacity(12)
+                .building("Main Building")
+                .floor("Level 7")
+                .roomNumber("Room 701")
                 .status(ResourceStatus.ACTIVE)
                 .build();
 
-        Resource r6 = Resource.builder()
-                .name("Science Lecture Theatre")
+        Resource r18 = Resource.builder()
+                .name("Meeting Room 2")
+                .type("Meeting Room")
+                .category(ResourceCategory.FACILITY)
+                .capacity(12)
+                .building("Main Building")
+                .floor("Level 7")
+                .roomNumber("Room 702")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r19 = Resource.builder()
+                .name("Projector Room A406")
+                .type("Projector Room")
+                .category(ResourceCategory.FACILITY)
+                .capacity(20)
+                .building("Main Building")
+                .floor("Level 4")
+                .roomNumber("A406")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r20 = Resource.builder()
+                .name("Projector Room A407")
+                .type("Projector Room")
+                .category(ResourceCategory.FACILITY)
+                .capacity(20)
+                .building("Main Building")
+                .floor("Level 4")
+                .roomNumber("A407")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r21 = Resource.builder()
+                .name("Lecture Hall B502")
                 .type("Lecture Hall")
                 .category(ResourceCategory.FACILITY)
-                .capacity(180)
+                .capacity(80)
                 .building("Main Building")
-                .floor("Level 2")
-                .roomNumber("Room 210")
+                .floor("Level 5")
+                .roomNumber("B502")
                 .status(ResourceStatus.ACTIVE)
-                .description("Modern tiered lecture theatre with dual projection.")
                 .build();
 
-        Resource r7 = Resource.builder()
-                .name("South Wing Hall")
+        Resource r22 = Resource.builder()
+                .name("Lecture Hall B503")
+                .type("Lecture Hall")
+                .category(ResourceCategory.FACILITY)
+                .capacity(80)
+                .building("Main Building")
+                .floor("Level 5")
+                .roomNumber("B503")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r23 = Resource.builder()
+                .name("Lecture Hall E401")
+                .type("Lecture Hall")
+                .category(ResourceCategory.FACILITY)
+                .capacity(60)
+                .building("Main Building")
+                .floor("Level 4")
+                .roomNumber("E401")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r24 = Resource.builder()
+                .name("Lecture Hall E304")
+                .type("Lecture Hall")
+                .category(ResourceCategory.FACILITY)
+                .capacity(60)
+                .building("Main Building")
+                .floor("Level 3")
+                .roomNumber("E304")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r25 = Resource.builder()
+                .name("Lecture Hall A303")
+                .type("Lecture Hall")
+                .category(ResourceCategory.FACILITY)
+                .capacity(100)
+                .building("Main Building")
+                .floor("Level 3")
+                .roomNumber("A303")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r26 = Resource.builder()
+                .name("Lecture Hall A305")
+                .type("Lecture Hall")
+                .category(ResourceCategory.FACILITY)
+                .capacity(100)
+                .building("Main Building")
+                .floor("Level 3")
+                .roomNumber("A305")
+                .status(ResourceStatus.ACTIVE)
+                .build();
+
+        Resource r27 = Resource.builder()
+                .name("Lecture Hall A404")
                 .type("Lecture Hall")
                 .category(ResourceCategory.FACILITY)
                 .capacity(120)
                 .building("Main Building")
-                .floor("Main Floor")
-                .roomNumber("Hall 1")
+                .floor("Level 4")
+                .roomNumber("A404")
                 .status(ResourceStatus.ACTIVE)
-                .description("Standard acoustics and whiteboard setups.")
                 .build();
 
-        Resource r8 = Resource.builder()
-                .name("Mini Lecture Hall B")
+        Resource r28 = Resource.builder()
+                .name("Lecture Hall A504")
                 .type("Lecture Hall")
                 .category(ResourceCategory.FACILITY)
-                .capacity(60)
-                .building("New Building")
-                .floor("Basement")
-                .roomNumber("Room B10")
+                .capacity(120)
+                .building("Main Building")
+                .floor("Level 5")
+                .roomNumber("A504")
                 .status(ResourceStatus.ACTIVE)
-                .description("Intimate lecture hall for small student groups.")
                 .build();
 
-        resourceRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5, r6, r7, r8));
+        resourceRepository.saveAll(Arrays.asList(
+                r1, r2, r9, r10, r11, r12, r13, r14, r15, r16,
+                r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27, r28
+        ));
         System.out.println("✅ Member 1: Database Updated with Suggested Campus Data.");
     }
 }

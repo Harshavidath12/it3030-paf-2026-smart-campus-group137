@@ -19,8 +19,8 @@ public class ResourceService {
         return resourceRepository.findAll();
     }
 
-    public List<Resource> search(String type, String building, String floor, Integer minCapacity) {
-        return resourceRepository.searchResources(type, building, floor, minCapacity);
+    public List<Resource> search(String type, String building, String floor, ResourceStatus status, Integer minCapacity) {
+        return resourceRepository.searchResources(type, building, floor, status, minCapacity);
     }
 
     public Optional<Resource> getResourceById(Long id) {

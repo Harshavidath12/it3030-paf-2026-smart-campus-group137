@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllResources } from '../../services/resourceService';
+import { getAllResources, createResource } from '../../services/resourceService';
 import { getMe } from '../../services/authService';
 import FacilityImage from '../../components/FacilityImage';
 import './ResourceDiscoveryPage.css';
@@ -15,10 +15,24 @@ const ResourceDiscoveryPage = () => {
     type: '',
     building: '',
     floor: '',
-    minCapacity: ''
+    minCapacity: '',
+    status: ''
   });
 
   const [activeSidebar, setActiveSidebar] = useState('All');
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    type: 'Lecture Hall',
+    category: 'FACILITY',
+    capacity: 0,
+    building: 'Main Building',
+    floor: '',
+    roomNumber: '',
+    status: 'ACTIVE',
+    description: '',
+    metadata: ''
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -56,6 +70,21 @@ const ResourceDiscoveryPage = () => {
     setFilters(prev => ({ ...prev, building: building === 'All' ? '' : building }));
   };
 
+  const handleCreateResource = async (e) => {
+    e.preventDefault();
+    try {
+      await createResource(formData);
+      setShowModal(false);
+      fetchResources();
+      setFormData({
+        name: '', type: 'Lecture Hall', category: 'FACILITY', capacity: 0,
+        building: 'Main Building', floor: '', roomNumber: '', status: 'ACTIVE', description: '', metadata: ''
+      });
+    } catch (err) {
+      console.error("Failed to create resource", err);
+    }
+  };
+
   const getVisualClass = (index) => {
     const classes = ['visual-orange', 'visual-blue', 'visual-purple', 'visual-green'];
     return classes[index % classes.length];
@@ -65,8 +94,7 @@ const ResourceDiscoveryPage = () => {
     const t = type?.toLowerCase() || '';
     if (t.includes('hall') || t.includes('auditorium')) return '🏛️';
     if (t.includes('lab') || t.includes('laboratory')) return '🧪';
-    if (t.includes('projector')) return '📽️';
-    if (t.includes('laptop')) return '💻';
+    if (t.includes('projector') || t.includes('equipment') || t.includes('camera')) return '📷';
     if (t.includes('meeting')) return '🤝';
     if (t.includes('tutorial')) return '📖';
     return '🏫';
@@ -81,30 +109,34 @@ const ResourceDiscoveryPage = () => {
           <h2>CAMPUS RESOURCE</h2>
         </div>
         <nav className="sidebar-menu">
-          <div className="menu-label">Navigation</div>
           <button 
             className={`menu-item ${activeSidebar === 'All' ? 'active' : ''}`}
             onClick={() => handleSidebarClick('All')}
           >
-            <span className="item-icon">🏫</span>
-            All Resources
+            All
           </button>
           
-          <div className="menu-label">Buildings</div>
           <button 
             className={`menu-item ${activeSidebar === 'Main Building' ? 'active' : ''}`}
             onClick={() => handleSidebarClick('Main Building')}
           >
-            <span className="item-icon">🏛️</span>
             Main Building
           </button>
           <button 
             className={`menu-item ${activeSidebar === 'New Building' ? 'active' : ''}`}
             onClick={() => handleSidebarClick('New Building')}
           >
-            <span className="item-icon">🏗️</span>
             New Building
           </button>
+
+          {user?.role === 'ADMIN' && (
+            <button 
+              className="menu-item add-nav-btn"
+              onClick={() => setShowModal(true)}
+            >
+              + Register New
+            </button>
+          )}
         </nav>
       </aside>
 
@@ -112,43 +144,58 @@ const ResourceDiscoveryPage = () => {
       <main className="main-content-wrapper">
         <header className="page-header">
           <div className="title-content">
-            <h1>Discovery Hub</h1>
+            <h1>Resource Hub</h1>
             <p>Managing {resources.length}+ high-fidelity facilities across his campus.</p>
           </div>
           
-          {user?.role === 'ADMIN' && (
-            <button className="premium-add-btn" onClick={() => navigate('/admin/resources')}>
-              <span>+</span> Register New
-            </button>
-          )}
+          {/* Moved to Navbar */}
         </header>
 
         <div className="smart-search-zone">
           <div className="search-input-box">
-            <span className="search-box-icon">🔍</span>
+            <span className="search-box-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+            </span>
             <input 
               name="type" 
-              placeholder="Search specific rooms (e.g. Lab 401)" 
+              placeholder="Search rooms..." 
               value={filters.type} 
               onChange={handleFilterChange} 
             />
           </div>
           <div className="fast-filters">
             <select name="type" className="premium-select" value={filters.type} onChange={handleFilterChange}>
-              <option value="">All Types</option>
+              <option value="">Type </option>
               <option value="Lecture Hall">Lecture Hall</option>
-              <option value="Laboratory">Laboratory</option>
+              <option value="Computer Lab">Computer Lab</option>
               <option value="Meeting Room">Meeting Room</option>
+              <option value="Projector Room">Projector Room</option>
+              <option value="Library">Library</option>
+              <option value="Laboratory">Laboratory</option>
             </select>
-            <select name="floor" className="premium-select" value={filters.floor} onChange={handleFilterChange}>
-              <option value="">Any Floor</option>
-              <option value="Basement">Basement</option>
-              <option value="Level 1">Level 1</option>
-              <option value="Level 2">Level 2</option>
-              <option value="3rd Floor">3rd Floor</option>
-              <option value="4th Floor">4th Floor</option>
+            <select name="minCapacity" className="premium-select" value={filters.minCapacity} onChange={handleFilterChange}>
+              <option value="">Capacity </option>
+              <option value="30">30+ Seats</option>
+              <option value="50">50+ Seats</option>
+              <option value="100">100+ Seats</option>
             </select>
-            <button className="reset-btn" onClick={() => setFilters({type:'', building:'', floor:'', minCapacity:''})}>🔄</button>
+            <select name="building" className="premium-select" value={filters.building} onChange={handleFilterChange}>
+              <option value="">Location </option>
+              <option value="Main Building">Main Building</option>
+              <option value="New Building">New Building</option>
+            </select>
+            <select name="status" className="premium-select" value={filters.status} onChange={handleFilterChange}>
+              <option value="">Status </option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
+            </select>
+            <button className="reset-btn" onClick={() => setFilters({type:'', building:'', floor:'', minCapacity:'', status:''})}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -209,6 +256,103 @@ const ResourceDiscoveryPage = () => {
           </div>
         )}
       </main>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="premium-modal">
+            <div className="modal-header">
+              <h2>Register New Resource</h2>
+              <p>Add a new facility or equipment to the campus catalogue.</p>
+            </div>
+            
+            <form onSubmit={handleCreateResource} className="modal-form">
+              <div className="form-group full">
+                <label>Resource Name</label>
+                <input 
+                  required 
+                  value={formData.name} 
+                  onChange={e => setFormData({...formData, name: e.target.value})}
+                  placeholder="e.g. Innovation Lab 01"
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Type</label>
+                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                    <option value="Lecture Hall">Lecture Hall</option>
+                    <option value="Computer Lab">Computer Lab</option>
+                    <option value="Meeting Room">Meeting Room</option>
+                    <option value="Projector Room">Projector Room</option>
+                    <option value="Library">Library</option>
+                    <option value="Laboratory">Laboratory</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Capacity</label>
+                  <input 
+                    type="number" 
+                    value={formData.capacity} 
+                    onChange={e => setFormData({...formData, capacity: parseInt(e.target.value) || 0})}
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Building</label>
+                  <select value={formData.building} onChange={e => setFormData({...formData, building: e.target.value})}>
+                    <option value="Main Building">Main Building</option>
+                    <option value="New Building">New Building</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Floor</label>
+                  <input 
+                    required 
+                    value={formData.floor} 
+                    onChange={e => setFormData({...formData, floor: e.target.value})}
+                    placeholder="e.g. Level 3"
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Room Number</label>
+                  <input 
+                    required 
+                    value={formData.roomNumber} 
+                    onChange={e => setFormData({...formData, roomNumber: e.target.value})}
+                    placeholder="e.g. A301"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Status</label>
+                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group full">
+                <label>Description</label>
+                <textarea 
+                  value={formData.description} 
+                  onChange={e => setFormData({...formData, description: e.target.value})}
+                  placeholder="Briefly describe this resource..."
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Discard</button>
+                <button type="submit" className="btn-submit">Save Resource</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

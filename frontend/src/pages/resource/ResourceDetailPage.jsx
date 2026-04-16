@@ -64,7 +64,7 @@ const ResourceDetailPage = () => {
         boxShadow: '0 30px 80px rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.01)',
         display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '60px'
       }}>
-        <FacilityImage res={resource} fallbackEmoji={getEmoji(resource.type)} />
+        <FacilityImage res={resource} fallbackEmoji={getEmoji(resource.type)} height="500px" />
 
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <span className={`badge-round ${resource.status === 'ACTIVE' ? 'badge-active' : 'badge-out'}`} style={{width: 'fit-content'}}>
