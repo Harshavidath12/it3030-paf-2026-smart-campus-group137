@@ -17,6 +17,8 @@ import MyBookings from './pages/MyBookings';
 import CreateBooking from './pages/CreateBooking';
 import AdminBookingsPage from './pages/AdminBookingsPage';
 import QRCodeScanner from './components/bookings/QRCodeScanner';
+import TicketingPage from './pages/TicketingPage';
+import MyTicketsPage from './pages/MyTicketsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { getStoredUser, isLoggedIn, logout } from './services/authService';
 
@@ -99,6 +101,22 @@ const AppContent = () => {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/contact"
+        element={
+          <ProtectedRoute>
+            <TicketingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-tickets"
+        element={
+          <ProtectedRoute>
+            <MyTicketsPage />
           </ProtectedRoute>
         }
       />
