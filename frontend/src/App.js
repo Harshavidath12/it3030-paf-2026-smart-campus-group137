@@ -15,6 +15,8 @@ import ProtectedRoute     from './components/ProtectedRoute';
 import HomePage           from './pages/HomePage';
 import AdminDashboard     from './pages/AdminDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
+import TicketingPage        from './pages/TicketingPage';
+import MyTicketsPage        from './pages/MyTicketsPage';
 
 // Member 1: Facilities & Assets Catalogue
 import ResourceDiscoveryPage from './pages/resource/ResourceDiscoveryPage';
@@ -60,6 +62,22 @@ function App() {
           element={
             <ProtectedRoute>
               <TechnicianDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <TicketingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-tickets"
+          element={
+            <ProtectedRoute>
+              <MyTicketsPage />
             </ProtectedRoute>
           }
         />
