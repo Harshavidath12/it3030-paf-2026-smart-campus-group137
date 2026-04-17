@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 const BookingForm = () => {
   const navigate = useNavigate();
+  const today = new Date().toISOString().split('T')[0];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -90,6 +91,7 @@ const BookingForm = () => {
             <TextField fullWidth label="Booking Date" name="bookingDate" type="date"
               InputLabelProps={{ shrink: true }} value={formData.bookingDate}
               onChange={handleChange} required
+              inputProps={{ min: today }}
               InputProps={{ startAdornment: <InputAdornment position="start"><EventNote color="primary" /></InputAdornment> }}
             />
           </Grid>
