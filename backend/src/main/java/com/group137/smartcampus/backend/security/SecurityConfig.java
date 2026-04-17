@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/auth/**", "/error").permitAll()
                 .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/resources/**").permitAll()
+                .requestMatchers("/api/resources/**").permitAll()
                 .requestMatchers("/api/bookings/**").permitAll()
                 
                 // Protected resources

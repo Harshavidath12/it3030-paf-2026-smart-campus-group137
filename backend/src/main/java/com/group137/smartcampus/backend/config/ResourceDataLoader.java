@@ -70,7 +70,7 @@ public class ResourceDataLoader implements CommandLineRunner {
                 .building("New Building")
                 .floor("Level 4")
                 .roomNumber("A401")
-                .status(ResourceStatus.ACTIVE)
+                .status(ResourceStatus.OUT_OF_SERVICE)
                 .build();
 
         Resource r11 = Resource.builder()
@@ -159,7 +159,7 @@ public class ResourceDataLoader implements CommandLineRunner {
                 .building("Main Building")
                 .floor("Level 7")
                 .roomNumber("Room 702")
-                .status(ResourceStatus.ACTIVE)
+                .status(ResourceStatus.OUT_OF_SERVICE)
                 .build();
 
         Resource r19 = Resource.builder()
@@ -203,7 +203,7 @@ public class ResourceDataLoader implements CommandLineRunner {
                 .building("Main Building")
                 .floor("Level 5")
                 .roomNumber("B503")
-                .status(ResourceStatus.ACTIVE)
+                .status(ResourceStatus.OUT_OF_SERVICE)
                 .build();
 
         Resource r23 = Resource.builder()

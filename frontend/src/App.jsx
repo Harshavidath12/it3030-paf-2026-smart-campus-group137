@@ -23,6 +23,11 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { getStoredUser, isLoggedIn, logout } from './services/authService';
 import NotificationBell from './components/NotificationBell';
 
+// Resources & Assets (Member 1)
+import ResourceDiscoveryPage from './pages/resource/ResourceDiscoveryPage';
+import ResourceDetailPage from './pages/resource/ResourceDetailPage';
+import AdminResourceDashboard from './pages/resource/AdminResourceDashboard';
+
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,13 +65,21 @@ const NavBar = () => {
         <Button sx={navButtonStyle('/my-bookings')} onClick={() => navigate('/my-bookings')}>
           Booking Facility
         </Button>
+        <Button sx={navButtonStyle('/resources')} onClick={() => navigate('/resources')}>
+          Resource Hub
+        </Button>
         <Button sx={navButtonStyle('/book')} onClick={() => navigate('/book')}>
           New Booking
         </Button>
         {(user?.role === 'ADMIN' || user?.role === 'MANAGER') && (
-          <Button sx={navButtonStyle('/admin/bookings')} onClick={() => navigate('/admin/bookings')}>
-            Booking Management
-          </Button>
+          <>
+            <Button sx={navButtonStyle('/admin/bookings')} onClick={() => navigate('/admin/bookings')}>
+              Booking Management
+            </Button>
+            <Button sx={navButtonStyle('/admin/resources')} onClick={() => navigate('/admin/resources')}>
+              Resource Catalogue
+            </Button>
+          </>
         )}
         <Button sx={navButtonStyle('/scanner')} onClick={() => navigate('/scanner')}>
           QR Check-in
@@ -184,6 +197,34 @@ const AppContent = () => {
               <Container maxWidth="md" sx={{ py: 4 }}>
                 <QRCodeScanner />
               </Container>
+            </BookingLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Resources & Assets (Member 1) */}
+      <Route
+        path="/resources"
+        element={
+          <ProtectedRoute>
+            <ResourceDiscoveryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resources/:id"
+        element={
+          <ProtectedRoute>
+            <ResourceDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/resources"
+        element={
+          <ProtectedRoute>
+            <BookingLayout>
+              <AdminResourceDashboard />
             </BookingLayout>
           </ProtectedRoute>
         }

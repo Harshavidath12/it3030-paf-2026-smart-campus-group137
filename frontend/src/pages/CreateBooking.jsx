@@ -10,9 +10,22 @@ const CreateBooking = () => {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Box mb={2}>
-        <Button variant="text" startIcon={<ArrowBack />}
+        <Button 
+          variant="contained" 
+          startIcon={<ArrowBack />}
           onClick={() => navigate('/my-bookings')}
-          sx={{ color: '#4f46e5' }}
+          sx={{ 
+            bgcolor: 'white', 
+            color: '#4f46e5', 
+            fontWeight: '800',
+            borderRadius: '12px',
+            px: 3,
+            py: 1,
+            boxShadow: '0 10px 20px rgba(0,0,0,0.05)',
+            '&:hover': { bgcolor: '#f8fafc', transform: 'translateY(-2px)' },
+            transition: 'all 0.3s',
+            textTransform: 'none'
+          }}
         >
           Back to My Bookings
         </Button>

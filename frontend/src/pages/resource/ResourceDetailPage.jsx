@@ -67,8 +67,8 @@ const ResourceDetailPage = () => {
         <FacilityImage res={resource} fallbackEmoji={getEmoji(resource.type)} height="500px" />
 
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <span className={`badge-round ${resource.status === 'ACTIVE' ? 'badge-active' : 'badge-out'}`} style={{width: 'fit-content'}}>
-            {resource.status}
+          <span className={`admin-badge badge-${resource.status.toLowerCase().replace(/_/g, '-')}`} style={{width: 'fit-content'}}>
+            {resource.status === 'ACTIVE' ? '🟢 AVAILABLE' : '🛑 OUT OF SERVICE'}
           </span>
           <h1 style={{fontSize: '4.5rem', margin: '20px 0', fontWeight: '800', color: 'var(--accent-purple)', letterSpacing: '-3px'}}>{resource.name}</h1>
           
@@ -79,11 +79,35 @@ const ResourceDetailPage = () => {
             <div>🏷️ <strong>Category:</strong><br/>{resource.category}</div>
           </div>
 
-          <div style={{borderTop: '1px solid #f1f5f9', paddingTop: '30px'}}>
-             <h3 style={{color: 'var(--accent-purple)', marginBottom: '15px', fontSize: '1.6rem'}}>Property Description</h3>
-             <p style={{lineHeight: '2', color: '#636e72', fontSize: '1.1rem'}}>
-               {resource.description || "Detailed facility profile is still being populated by the campus administration."}
-             </p>
+          <div style={{borderTop: '1px solid #f1f5f9', paddingTop: '30px', display: 'flex', flexDirection: 'column', gap: '30px'}}>
+             <div>
+               <h3 style={{color: 'var(--accent-purple)', marginBottom: '15px', fontSize: '1.6rem'}}>Property Description</h3>
+               <p style={{lineHeight: '2', color: '#636e72', fontSize: '1.1rem'}}>
+                 {resource.description || "Detailed facility profile is still being populated by the campus administration."}
+               </p>
+             </div>
+
+             {resource.status === 'ACTIVE' && (
+               <button 
+                onClick={() => navigate(`/book?resourceId=${resource.id}`)}
+                style={{
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  color: 'white',
+                  padding: '20px 40px',
+                  borderRadius: '20px',
+                  border: 'none',
+                  fontSize: '1.2rem',
+                  fontWeight: '800',
+                  cursor: 'pointer',
+                  boxShadow: '0 20px 40px rgba(99, 102, 241, 0.3)',
+                  transition: 'all 0.3s'
+                }}
+                onMouseOver={(e) => e.target.style.transform = 'translateY(-5px)'}
+                onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+               >
+                 🚀 Book This Facility Now
+               </button>
+             )}
           </div>
         </div>
       </div>
