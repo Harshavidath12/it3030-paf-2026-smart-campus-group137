@@ -152,32 +152,40 @@ const HomePage = () => {
         </div>
       </nav>
 
-      <main
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingTop: '15vh',
-          gap: '20px',
-        }}
-      >
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '10px' }}>
-          Welcome to the Operations Hub!
-        </h1>
-        <p
-          style={{
-            color: 'var(--text-muted)',
-            maxWidth: '600px',
-            textAlign: 'center',
-            fontSize: '1.1rem',
-            lineHeight: '1.6',
-          }}
-        >
-          You have successfully authenticated. Use the booking facility to create and manage your campus reservations.
+      {/* Main Content */}
+      <main style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: '15vh',
+        gap: '20px'
+      }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '10px' }}>Welcome to the Operations Hub!</h1>
+        <p style={{ color: 'var(--text-muted)', maxWidth: '600px', textAlign: 'center', fontSize: '1.1rem', lineHeight: '1.6' }}>
+          You have successfully authenticated via Google. This is the main dashboard for the Smart Campus system.
         </p>
-
+        
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '30px' }}>
+          <button 
+            onClick={() => navigate('/resources')}
+            className="home-primary-button"
+            style={{
+              ...primaryButtonStyle,
+              transform: 'translateY(0)',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+            }}
+          >
+            <span>🔍</span> Explore Catalogue
+          </button>
+
           <button
             onClick={() => navigate('/my-bookings')}
             style={primaryButtonStyle}
@@ -191,6 +199,32 @@ const HomePage = () => {
             }}
           >
             Booking Facility
+          </button>
+
+          <button 
+            onClick={() => navigate('/notifications')}
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              color: 'var(--text-main)',
+              border: '1px solid var(--border-color)',
+              padding: '14px 28px',
+              borderRadius: '12px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+            }}
+          >
+            <span>🔔</span> View Notifications
           </button>
         </div>
       </main>

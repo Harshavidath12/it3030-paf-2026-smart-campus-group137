@@ -166,6 +166,18 @@ const AdminDashboard = () => {
           >
             Welcome to the Administrative Control Panel. Here you can view and manage user records for the Smart Campus system.
           </p>
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '15px' }}>
+            <button 
+              onClick={() => navigate('/admin/resources')}
+              style={{
+                background: 'rgba(99, 102, 241, 0.1)', color: 'var(--primary)', 
+                border: '1px solid var(--primary)', padding: '10px 20px', 
+                borderRadius: '8px', cursor: 'pointer', fontWeight: '600'
+              }}
+            >
+              ⚙️ Manage Facilities & Assets
+            </button>
+          </div>
         </div>
 
         <div
