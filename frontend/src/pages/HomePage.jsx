@@ -81,6 +81,25 @@ const HomePage = () => {
           }}
         >
           <button
+            onClick={() => navigate('/resources')}
+            style={{
+              background: 'var(--primary-gradient)',
+              border: 'none',
+              color: '#fff',
+              padding: '10px 16px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              boxShadow: 'var(--shadow-sm)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            Explore Catalogue
+          </button>
+          <button
             onClick={() => navigate('/my-bookings')}
             style={{
               background: 'var(--primary-gradient)',
@@ -167,24 +186,6 @@ const HomePage = () => {
         </p>
         
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '30px' }}>
-          <button 
-            onClick={() => navigate('/resources')}
-            className="home-primary-button"
-            style={{
-              ...primaryButtonStyle,
-              transform: 'translateY(0)',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-          >
-            <span>🔍</span> Explore Catalogue
-          </button>
 
           <button
             onClick={() => navigate('/my-bookings')}
