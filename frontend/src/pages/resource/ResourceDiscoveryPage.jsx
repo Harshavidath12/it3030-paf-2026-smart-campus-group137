@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllResources, createResource } from '../../services/resourceService';
-import { getMe } from '../../services/authService';
+import { getMe, logout } from '../../services/authService';
+import NotificationBell from '../../components/NotificationBell';
 import FacilityImage from '../../components/FacilityImage';
 import './ResourceDiscoveryPage.css';
 
@@ -19,7 +20,6 @@ const ResourceDiscoveryPage = () => {
     status: ''
   });
 
-  const [activeSidebar, setActiveSidebar] = useState('All');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -65,9 +65,9 @@ const ResourceDiscoveryPage = () => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSidebarClick = (building) => {
-    setActiveSidebar(building);
-    setFilters(prev => ({ ...prev, building: building === 'All' ? '' : building }));
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
   };
 
   const handleCreateResource = async (e) => {
@@ -113,34 +113,123 @@ const ResourceDiscoveryPage = () => {
         </button>
       )}
 
-      {/* Premium Sidebar Component */}
-      <aside className="campus-sidebar">
-        <div className="sidebar-brand">
-          <div className="brand-logo">CS</div>
-          <h2>CAMPUS RESOURCE</h2>
+      {/* Standard App Navbar Component */}
+      <nav
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem 2rem',
+          background: 'var(--bg-gradient-header)',
+          color: 'var(--text-header)',
+          borderBottom: '1px solid var(--border-color)',
+          boxShadow: 'var(--shadow-md)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 1000,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
+            Smart Campus
+          </div>
+          <span onClick={() => navigate('/contact')} className="nav-link-text">
+            Contact Us
+          </span>
         </div>
-        <nav className="sidebar-menu">
-          <button
-            className={`menu-item ${activeSidebar === 'All' ? 'active' : ''}`}
-            onClick={() => handleSidebarClick('All')}
-          >
-            All
-          </button>
 
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px',
+          }}
+        >
           <button
-            className={`menu-item ${activeSidebar === 'Main Building' ? 'active' : ''}`}
-            onClick={() => handleSidebarClick('Main Building')}
+            onClick={() => navigate('/my-bookings')}
+            style={{
+              background: 'var(--primary-gradient)',
+              border: 'none',
+              color: '#fff',
+              padding: '10px 16px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              boxShadow: 'var(--shadow-sm)',
+            }}
           >
-            Main Building
+            Booking Facility
           </button>
-          <button
-            className={`menu-item ${activeSidebar === 'New Building' ? 'active' : ''}`}
-            onClick={() => handleSidebarClick('New Building')}
-          >
-            New Building
-          </button>
-        </nav>
-      </aside>
+          {user ? (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>{user.name || 'User'}</span>
+                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>Signed in</span>
+              </div>
+              <NotificationBell />
+              <div
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  boxShadow: 'var(--shadow-sm)',
+                }}
+              >
+                <img
+                  src={user.profilePicture || 'https://www.svgrepo.com/show/475656/google-color.svg'}
+                  alt="Profile"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: 'var(--text-header)',
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  marginLeft: '10px',
+                  fontWeight: '500',
+                  transition: 'background 0.2s',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button 
+              onClick={() => navigate('/login')}
+              style={{
+                background: 'var(--primary-gradient)',
+                border: 'none',
+                color: '#fff',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                fontWeight: '500',
+              }}
+            >
+              Sign In
+            </button>
+          )}
+        </div>
+      </nav>
 
       {/* Main Content Area */}
       <main className="main-content-wrapper">
