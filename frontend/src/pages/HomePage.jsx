@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMe, logout } from '../services/authService';
 import NotificationBell from '../components/NotificationBell';
+import './HomePage.css';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -153,80 +154,63 @@ const HomePage = () => {
       </nav>
 
       {/* Main Content */}
-      <main style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: '15vh',
-        gap: '20px'
-      }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '10px' }}>Welcome to the Operations Hub!</h1>
-        <p style={{ color: 'var(--text-muted)', maxWidth: '600px', textAlign: 'center', fontSize: '1.1rem', lineHeight: '1.6' }}>
-          You have successfully authenticated via Google. This is the main dashboard for the Smart Campus system.
-        </p>
-        
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '30px' }}>
-          <button 
-            onClick={() => navigate('/resources')}
-            className="home-primary-button"
-            style={{
-              ...primaryButtonStyle,
-              transform: 'translateY(0)',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-          >
-            <span>🔍</span> Explore Catalogue
-          </button>
-
-          <button
-            onClick={() => navigate('/my-bookings')}
-            style={primaryButtonStyle}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-          >
-            Booking Facility
-          </button>
-
-          <button 
-            onClick={() => navigate('/notifications')}
-            style={{
-              background: 'rgba(255,255,255,0.1)',
-              color: 'var(--text-main)',
-              border: '1px solid var(--border-color)',
-              padding: '14px 28px',
-              borderRadius: '12px',
-              fontSize: '1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-            }}
-          >
-            <span>🔔</span> View Notifications
-          </button>
+      <main className="home-main">
+        {/* Left floating bar */}
+        <div className="left-sidebar">
+          <div className="sidebar-group">
+            <span className="sidebar-text">Light</span>
+            <span className="sidebar-icon">🔆</span>
+            <span className="sidebar-text" style={{ color: '#888' }}>Dark</span>
+          </div>
+          <div className="sidebar-divider"></div>
+          <div className="sidebar-scroll" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <span className="sidebar-icon">↑</span>
+            <span className="sidebar-text scroll-text">Scroll to top</span>
+          </div>
         </div>
+
+        {/* Section 1: Hero */}
+        <section className="hero-section">
+          <h2 className="hero-subtitle">BUILD YOUR FUTURE AT</h2>
+          <h1 className="hero-title">SMART CAMPUS</h1>
+          <div className="hero-bottom-actions">
+            <button className="hero-cta-btn" onClick={() => navigate('/resources')}>Explore Catalogue</button>
+          </div>
+        </section>
+
+        {/* Section 2: Info Grid */}
+        <section className="info-section">
+          <div className="info-left">
+            <h2 className="info-title">
+              Smart Campus is the premier network of modern educational facilities with over 15,000+ students and over 1,200+ top-tier educators growing every day!
+            </h2>
+          </div>
+          <div className="info-right">
+            <div className="info-box">
+              <p className="info-box-title">At Smart Campus you can:</p>
+              <ul className="info-box-list">
+                <li>Learn from skilled and talented teachers.</li>
+                <li>Receive top-tier educational certificates.</li>
+                <li>Achieve your utmost potential.</li>
+                <li>Be a part of a community of inspired, intellectual and talented individuals.</li>
+              </ul>
+              <p className="info-box-footer">We utilize the best practices available in teaching to develop the skills required for success in higher education.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: About Us */}
+        <section className="about-section">
+          <div className="about-footer-bar">
+            <div className="about-text-content">
+              <h2 className="about-title">About Smart Campus</h2>
+              <p className="about-desc">
+                Smart Campus is an innovative educational platform designed to provide students with state-of-the-art learning experiences, seamlessly blending technology with education.
+              </p>
+            </div>
+            <button className="read-story-btn">Read Full Story &rarr;</button>
+          </div>
+        </section>
       </main>
     </div>
   );
