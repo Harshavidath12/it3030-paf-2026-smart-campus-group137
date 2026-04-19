@@ -82,6 +82,25 @@ const HomePage = () => {
           }}
         >
           <button
+            onClick={() => navigate('/resources')}
+            style={{
+              background: 'var(--primary-gradient)',
+              border: 'none',
+              color: '#fff',
+              padding: '10px 16px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              boxShadow: 'var(--shadow-sm)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            Explore Catalogue
+          </button>
+          <button
             onClick={() => navigate('/my-bookings')}
             style={{
               background: 'var(--primary-gradient)',
@@ -167,7 +186,6 @@ const HomePage = () => {
             <span className="sidebar-icon">↑</span>
             <span className="sidebar-text scroll-text">Scroll to top</span>
           </div>
-        </div>
 
         {/* Section 1: Hero */}
         <section className="hero-section">
