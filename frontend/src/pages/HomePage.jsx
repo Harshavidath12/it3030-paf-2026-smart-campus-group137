@@ -186,6 +186,7 @@ const HomePage = () => {
             <span className="sidebar-icon">↑</span>
             <span className="sidebar-text scroll-text">Scroll to top</span>
           </div>
+        </div>
 
         {/* Section 1: Hero */}
         <section className="hero-section">
