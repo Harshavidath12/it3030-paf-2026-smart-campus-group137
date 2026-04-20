@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Box, Button, Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,82 +21,17 @@ import QRCodeScanner from './components/bookings/QRCodeScanner';
 import TicketingPage from './pages/TicketingPage';
 import MyTicketsPage from './pages/MyTicketsPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import { getStoredUser, isLoggedIn, logout } from './services/authService';
-import NotificationBell from './components/NotificationBell';
+import { isLoggedIn, logout } from './services/authService';
+import GlobalNavbar from './components/GlobalNavbar';
 
 // Resources & Assets (Member 1)
 import ResourceDiscoveryPage from './pages/resource/ResourceDiscoveryPage';
 import ResourceDetailPage from './pages/resource/ResourceDetailPage';
 import AdminResourceDashboard from './pages/resource/AdminResourceDashboard';
 
-const NavBar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const user = getStoredUser();
-
-  const isActive = (path) => location.pathname === path;
-
-  const navButtonStyle = (path) => ({
-    color: isActive(path) ? '#f59e0b' : 'rgba(255,255,255,0.8)',
-    fontWeight: isActive(path) ? 700 : 500,
-    borderBottom: isActive(path) ? '2px solid #f59e0b' : '2px solid transparent',
-    borderRadius: 0,
-    px: 2,
-    '&:hover': { color: '#fff', backgroundColor: 'rgba(255,255,255,0.08)' },
-  });
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login', { replace: true });
-  };
-
-  return (
-    <AppBar position="sticky" elevation={0}>
-      <Toolbar>
-        <Typography
-          variant="h6"
-          sx={{ flexGrow: 1, fontWeight: 'bold', cursor: 'pointer' }}
-          onClick={() => navigate('/')}
-        >
-          Smart Campus Hub
-        </Typography>
-        <Button sx={navButtonStyle('/')} onClick={() => navigate('/')}>
-          Home
-        </Button>
-        <Button sx={navButtonStyle('/my-bookings')} onClick={() => navigate('/my-bookings')}>
-          Booking Facility
-        </Button>
-        <Button sx={navButtonStyle('/resources')} onClick={() => navigate('/resources')}>
-          Resource Hub
-        </Button>
-        <Button sx={navButtonStyle('/book')} onClick={() => navigate('/book')}>
-          New Booking
-        </Button>
-        {(user?.role === 'ADMIN' || user?.role === 'MANAGER') && (
-          <>
-            <Button sx={navButtonStyle('/admin/bookings')} onClick={() => navigate('/admin/bookings')}>
-              Booking Management
-            </Button>
-            <Button sx={navButtonStyle('/admin/resources')} onClick={() => navigate('/admin/resources')}>
-              Resource Catalogue
-            </Button>
-          </>
-        )}
-        <Button sx={navButtonStyle('/scanner')} onClick={() => navigate('/scanner')}>
-          QR Check-in
-        </Button>
-        <NotificationBell />
-        <Button sx={{ ml: 1, color: 'rgba(255,255,255,0.8)' }} onClick={handleLogout}>
-          Logout
-        </Button>
-      </Toolbar>
-    </AppBar>
-  );
-};
-
 const BookingLayout = ({ children }) => (
   <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-    <NavBar />
+    <GlobalNavbar />
     <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', py: 2 }}>
       {children}
     </Box>

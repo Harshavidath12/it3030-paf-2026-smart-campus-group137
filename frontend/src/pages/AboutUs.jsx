@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import GlobalNavbar from '../components/GlobalNavbar';
 
 const AboutUs = () => {
   const navigate = useNavigate();
@@ -11,38 +12,7 @@ const AboutUs = () => {
       color: 'var(--text-main)',
       fontFamily: 'Inter, sans-serif',
     }}>
-      <nav
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '1rem 2rem',
-          background: 'var(--bg-gradient-header)',
-          color: 'var(--text-header)',
-          borderBottom: '1px solid var(--border-color)',
-          boxShadow: 'var(--shadow-md)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }} onClick={() => navigate('/')} style={{cursor: 'pointer', fontSize: '1.25rem', fontWeight: 'bold', translateY: '-2px'}}>
-            Smart Campus
-          </div>
-        </div>
-        <button
-          onClick={() => navigate('/')}
-          style={{
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            color: 'var(--text-header)',
-            padding: '8px 16px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: '600',
-          }}
-        >
-          Back to Home
-        </button>
-      </nav>
+      <GlobalNavbar />
       
       <main style={{ padding: '4rem 2rem', maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
         <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem', color: '#1e1b4b' }}>About Smart Campus</h1>
