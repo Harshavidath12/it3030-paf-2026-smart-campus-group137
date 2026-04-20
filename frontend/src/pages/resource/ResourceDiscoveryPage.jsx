@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllResources, createResource } from '../../services/resourceService';
 import { getMe, logout } from '../../services/authService';
 import NotificationBell from '../../components/NotificationBell';
+import GlobalNavbar from '../../components/GlobalNavbar';
 import FacilityImage from '../../components/FacilityImage';
 import './ResourceDiscoveryPage.css';
 
@@ -114,122 +115,7 @@ const ResourceDiscoveryPage = () => {
       )}
 
       {/* Standard App Navbar Component */}
-      <nav
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '1rem 2rem',
-          background: 'var(--bg-gradient-header)',
-          color: 'var(--text-header)',
-          borderBottom: '1px solid var(--border-color)',
-          boxShadow: 'var(--shadow-md)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 1000,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
-            Smart Campus
-          </div>
-          <span onClick={() => navigate('/contact')} className="nav-link-text">
-            Contact Us
-          </span>
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '15px',
-          }}
-        >
-          <button
-            onClick={() => navigate('/my-bookings')}
-            style={{
-              background: 'var(--primary-gradient)',
-              border: 'none',
-              color: '#fff',
-              padding: '10px 16px',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-          >
-            Booking Facility
-          </button>
-          {user ? (
-            <>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                <span style={{ fontWeight: '500', fontSize: '0.9rem' }}>{user.name || 'User'}</span>
-                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>Signed in</span>
-              </div>
-              <NotificationBell />
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  background: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  boxShadow: 'var(--shadow-sm)',
-                }}
-              >
-                <img
-                  src={user.profilePicture || 'https://www.svgrepo.com/show/475656/google-color.svg'}
-                  alt="Profile"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-              <button
-                onClick={handleLogout}
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: 'var(--text-header)',
-                  padding: '6px 14px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontSize: '0.85rem',
-                  marginLeft: '10px',
-                  fontWeight: '500',
-                  transition: 'background 0.2s',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button 
-              onClick={() => navigate('/login')}
-              style={{
-                background: 'var(--primary-gradient)',
-                border: 'none',
-                color: '#fff',
-                padding: '6px 14px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '0.85rem',
-                fontWeight: '500',
-              }}
-            >
-              Sign In
-            </button>
-          )}
-        </div>
-      </nav>
+      <GlobalNavbar customUser={user} />
 
       {/* Main Content Area */}
       <main className="main-content-wrapper">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getResourceById } from '../../services/resourceService';
 import FacilityImage from '../../components/FacilityImage';
+import GlobalNavbar from '../../components/GlobalNavbar';
 import './ResourceDiscoveryPage.css';
 
 const ResourceDetailPage = () => {
@@ -47,6 +48,8 @@ const ResourceDetailPage = () => {
   };
 
   return (
+    <>
+    <GlobalNavbar />
     <div className="discovery-wrapper">
       <button 
         onClick={() => navigate(-1)}
@@ -112,6 +115,7 @@ const ResourceDetailPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
