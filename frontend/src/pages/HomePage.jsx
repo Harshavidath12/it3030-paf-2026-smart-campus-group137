@@ -7,6 +7,7 @@ import './HomePage.css';
 const HomePage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -48,9 +49,10 @@ const HomePage = () => {
     <div
       style={{
         minHeight: '100vh',
-        background: 'var(--bg-gradient)',
-        color: 'var(--text-main)',
+        background: isDarkMode ? '#0f172a' : 'var(--bg-gradient)',
+        color: isDarkMode ? '#f1f5f9' : 'var(--text-main)',
         fontFamily: 'Inter, sans-serif',
+        transition: 'background 0.3s, color 0.3s'
       }}
     >
       <nav
@@ -59,18 +61,28 @@ const HomePage = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '1rem 2rem',
-          background: 'var(--bg-gradient-header)',
+          background: isDarkMode ? '#020617' : 'var(--bg-gradient-header)',
           color: 'var(--text-header)',
           borderBottom: '1px solid var(--border-color)',
           boxShadow: 'var(--shadow-md)',
+          transition: 'background 0.3s'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
           <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
             Smart Campus
           </div>
+          <span onClick={() => navigate('/resources')} className="nav-link-text">
+            Explore Catalogue
+          </span>
+          <span onClick={() => navigate('/my-bookings')} className="nav-link-text">
+            Booking Facility
+          </span>
           <span onClick={() => navigate('/contact')} className="nav-link-text">
             Contact Us
+          </span>
+          <span onClick={() => navigate('/about')} className="nav-link-text">
+            About Us
           </span>
         </div>
 
@@ -81,41 +93,6 @@ const HomePage = () => {
             gap: '15px',
           }}
         >
-          <button
-            onClick={() => navigate('/resources')}
-            style={{
-              background: 'var(--primary-gradient)',
-              border: 'none',
-              color: '#fff',
-              padding: '10px 16px',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              boxShadow: 'var(--shadow-sm)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            Explore Catalogue
-          </button>
-          <button
-            onClick={() => navigate('/my-bookings')}
-            style={{
-              background: 'var(--primary-gradient)',
-              border: 'none',
-              color: '#fff',
-              padding: '10px 16px',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-          >
-            Booking Facility
-          </button>
           {user ? (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
@@ -145,22 +122,25 @@ const HomePage = () => {
               <button
                 onClick={handleLogout}
                 style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: 'var(--text-header)',
-                  padding: '6px 14px',
+                  background: '#ef4444',
+                  border: 'none',
+                  color: '#ffffff',
+                  padding: '8px 16px',
                   borderRadius: '8px',
                   cursor: 'pointer',
                   fontSize: '0.85rem',
                   marginLeft: '10px',
-                  fontWeight: '500',
-                  transition: 'background 0.2s',
+                  fontWeight: '600',
+                  transition: 'background 0.2s, transform 0.2s',
+                  boxShadow: 'var(--shadow-sm)',
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                  e.currentTarget.style.background = '#dc2626';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                  e.currentTarget.style.background = '#ef4444';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
                 Logout
@@ -175,11 +155,11 @@ const HomePage = () => {
       {/* Main Content */}
       <main className="home-main">
         {/* Left floating bar */}
-        <div className="left-sidebar">
+        <div className="left-sidebar" style={{ background: isDarkMode ? 'rgba(30,30,40,0.9)' : 'rgba(255, 255, 255, 0.9)' }}>
           <div className="sidebar-group">
-            <span className="sidebar-text">Light</span>
-            <span className="sidebar-icon">🔆</span>
-            <span className="sidebar-text" style={{ color: '#888' }}>Dark</span>
+            <span className="sidebar-text" onClick={() => setIsDarkMode(false)} style={{ color: isDarkMode ? '#888' : (isDarkMode ? '#888' : '#333') }}>Light</span>
+            <span className="sidebar-icon" onClick={() => setIsDarkMode(!isDarkMode)} style={{ cursor: 'pointer' }}>{isDarkMode ? '🌙' : '🔆'}</span>
+            <span className="sidebar-text" onClick={() => setIsDarkMode(true)} style={{ color: isDarkMode ? '#fff' : '#888' }}>Dark</span>
           </div>
           <div className="sidebar-divider"></div>
           <div className="sidebar-scroll" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -227,7 +207,7 @@ const HomePage = () => {
                 Smart Campus is an innovative educational platform designed to provide students with state-of-the-art learning experiences, seamlessly blending technology with education.
               </p>
             </div>
-            <button className="read-story-btn">Read Full Story &rarr;</button>
+            <button className="read-story-btn" onClick={() => navigate('/about')}>Read Full Story &rarr;</button>
           </div>
         </section>
       </main>
