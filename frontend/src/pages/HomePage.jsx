@@ -59,20 +59,6 @@ const HomePage = () => {
 
       {/* Main Content */}
       <main className="home-main">
-        {/* Left floating bar */}
-        <div className="left-sidebar" style={{ background: isDarkMode ? 'rgba(30,30,40,0.9)' : 'rgba(255, 255, 255, 0.9)' }}>
-          <div className="sidebar-group">
-            <span className="sidebar-text" onClick={() => setIsDarkMode(false)} style={{ color: isDarkMode ? '#888' : (isDarkMode ? '#888' : '#333') }}>Light</span>
-            <span className="sidebar-icon" onClick={() => setIsDarkMode(!isDarkMode)} style={{ cursor: 'pointer' }}>{isDarkMode ? '🌙' : '🔆'}</span>
-            <span className="sidebar-text" onClick={() => setIsDarkMode(true)} style={{ color: isDarkMode ? '#fff' : '#888' }}>Dark</span>
-          </div>
-          <div className="sidebar-divider"></div>
-          <div className="sidebar-scroll" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <span className="sidebar-icon">↑</span>
-            <span className="sidebar-text scroll-text">Scroll to top</span>
-          </div>
-        </div>
-
         {/* Section 1: Hero */}
         <section className="hero-section">
           <h2 className="hero-subtitle">BUILD YOUR FUTURE AT</h2>

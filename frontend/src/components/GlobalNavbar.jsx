@@ -47,6 +47,9 @@ const GlobalNavbar = ({ isDarkMode = false, customUser }) => {
         <span onClick={() => navigate('/contact')} className={navLinkClass}>
           Contact Us
         </span>
+        <span onClick={() => navigate('/my-tickets')} className={navLinkClass}>
+          My Tickets
+        </span>
         <span onClick={() => navigate('/about')} className={navLinkClass}>
           About Us
         </span>
