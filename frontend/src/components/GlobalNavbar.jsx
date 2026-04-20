@@ -35,7 +35,7 @@ const GlobalNavbar = ({ isDarkMode = false, customUser }) => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }} onClick={() => navigate('/')} className="nav-link-text">
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)', cursor: 'pointer' }} onClick={() => navigate('/')}>
           Smart Campus
         </div>
         <span onClick={() => navigate('/resources')} className={navLinkClass}>

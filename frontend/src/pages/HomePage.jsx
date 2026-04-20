@@ -60,6 +60,7 @@ const HomePage = () => {
       {/* Main Content */}
       <main className="home-main">
         {/* Section 1: Hero */}
+
         <section className="hero-section">
           <h2 className="hero-subtitle">BUILD YOUR FUTURE AT</h2>
           <h1 className="hero-title">SMART CAMPUS</h1>
