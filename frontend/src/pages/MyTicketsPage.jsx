@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMyTickets, deleteTicket } from '../services/ticketService';
 import { logout } from '../services/authService';
+import GlobalNavbar from '../components/GlobalNavbar';
 
 const MyTicketsPage = () => {
   const navigate = useNavigate();
@@ -55,38 +56,7 @@ const MyTicketsPage = () => {
       color: 'var(--text-main)',
       fontFamily: 'Inter, sans-serif'
     }}>
-      {/* NavBar */}
-      <nav style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '1rem 2rem',
-        background: 'var(--bg-gradient-header)',
-        color: 'var(--text-header)',
-        borderBottom: '1px solid var(--border-color)',
-        boxShadow: 'var(--shadow-md)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <span 
-            onClick={() => navigate(-1)} 
-            style={{ 
-              cursor: 'pointer', 
-              fontSize: '1.2rem', 
-              padding: '5px 10px',
-              borderRadius: '8px',
-              transition: 'background 0.2s',
-            }}
-            onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
-            onMouseOut={(e) => e.target.style.background = 'none'}
-            title="Go Back"
-          >
-            ←
-          </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
-            🏛️ Smart Campus - My Tickets
-          </div>
-        </div>
-      </nav>
+      <GlobalNavbar />
 
       <main style={{
         maxWidth: '800px',
