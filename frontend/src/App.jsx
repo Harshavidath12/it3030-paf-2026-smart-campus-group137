@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import NotificationPanel from './pages/NotificationPanel';
 import HomePage from './pages/HomePage';
+import AboutUs from './pages/AboutUs';
 import AdminDashboard from './pages/AdminDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import MyBookings from './pages/MyBookings';
@@ -124,6 +125,14 @@ const AppContent = () => {
         element={
           <ProtectedRoute>
             <TicketingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/about"
+        element={
+          <ProtectedRoute>
+             <AboutUs />
           </ProtectedRoute>
         }
       />
