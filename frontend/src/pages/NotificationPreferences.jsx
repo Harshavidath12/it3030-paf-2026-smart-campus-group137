@@ -6,11 +6,8 @@ const NotificationPreferences = () => {
   const [preferences, setPreferences] = useState({
     disableAll: false,
     bookingWebEnabled: true,
-    bookingEmailEnabled: true,
     ticketWebEnabled: true,
-    ticketEmailEnabled: true,
     generalWebEnabled: true,
-    generalEmailEnabled: true,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -22,11 +19,8 @@ const NotificationPreferences = () => {
         setPreferences({
           disableAll: data.disableAll || false,
           bookingWebEnabled: data.bookingWebEnabled !== false, // default true if undefined
-          bookingEmailEnabled: data.bookingEmailEnabled !== false,
           ticketWebEnabled: data.ticketWebEnabled !== false,
-          ticketEmailEnabled: data.ticketEmailEnabled !== false,
           generalWebEnabled: data.generalWebEnabled !== false,
-          generalEmailEnabled: data.generalEmailEnabled !== false,
         });
       } catch (error) {
         console.error("Failed to fetch preferences", error);
@@ -85,13 +79,12 @@ const NotificationPreferences = () => {
             <tr>
               <th className="th-feature"></th>
               <th className="th-toggle">Web</th>
-              <th className="th-toggle">Email ⚙️</th>
             </tr>
           </thead>
           <tbody>
             {/* Bookings Section */}
             <tr className="pref-section-header">
-              <td colSpan="3">Bookings</td>
+              <td colSpan="2">Bookings</td>
             </tr>
             <tr className="pref-row">
               <td>Booking notifications</td>
@@ -102,18 +95,11 @@ const NotificationPreferences = () => {
                   disabled={preferences.disableAll || saving}
                 />
               </td>
-              <td className="td-toggle">
-                <ToggleSwitch 
-                  checked={preferences.bookingEmailEnabled} 
-                  onChange={() => handleToggle('bookingEmailEnabled')} 
-                  disabled={preferences.disableAll || saving}
-                />
-              </td>
             </tr>
 
             {/* Tickets Section */}
             <tr className="pref-section-header">
-              <td colSpan="3">Tickets</td>
+              <td colSpan="2">Tickets</td>
             </tr>
             <tr className="pref-row">
               <td>Ticket updates</td>
@@ -124,18 +110,11 @@ const NotificationPreferences = () => {
                   disabled={preferences.disableAll || saving}
                 />
               </td>
-              <td className="td-toggle">
-                <ToggleSwitch 
-                  checked={preferences.ticketEmailEnabled} 
-                  onChange={() => handleToggle('ticketEmailEnabled')} 
-                  disabled={preferences.disableAll || saving}
-                />
-              </td>
             </tr>
 
             {/* General Section */}
             <tr className="pref-section-header">
-              <td colSpan="3">General</td>
+              <td colSpan="2">General</td>
             </tr>
             <tr className="pref-row">
               <td>General announcements</td>
@@ -143,13 +122,6 @@ const NotificationPreferences = () => {
                 <ToggleSwitch 
                   checked={preferences.generalWebEnabled} 
                   onChange={() => handleToggle('generalWebEnabled')} 
-                  disabled={preferences.disableAll || saving}
-                />
-              </td>
-              <td className="td-toggle">
-                <ToggleSwitch 
-                  checked={preferences.generalEmailEnabled} 
-                  onChange={() => handleToggle('generalEmailEnabled')} 
                   disabled={preferences.disableAll || saving}
                 />
               </td>

@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Stores user notification preferences for both web and email channels.
+ * Stores user notification preferences for the web platform.
  * Primary Key is the userId (1-to-1 mapping with User).
  */
 @Entity
@@ -40,18 +40,5 @@ public class NotificationPreference {
     @Column(nullable = false)
     @Builder.Default
     private boolean generalWebEnabled = true;
-
-    // Email preferences
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean bookingEmailEnabled = true;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean ticketEmailEnabled = true;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean generalEmailEnabled = true;
 
 }

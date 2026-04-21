@@ -81,10 +81,6 @@
   text-align: center !important;
 }
 
-.th-toggle:last-child {
-  color: #fbbf24; /* matches email icon color in image */
-}
-
 .pref-section-header td {
   background-color: #f9f9f9;
   font-weight: 600;

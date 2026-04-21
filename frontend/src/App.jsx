@@ -92,7 +92,9 @@ const AppContent = () => {
         path="/notification-preferences"
         element={
           <ProtectedRoute>
-            <NotificationPreferences />
+            <BookingLayout>
+              <NotificationPreferences />
+            </BookingLayout>
           </ProtectedRoute>
         }
       />
