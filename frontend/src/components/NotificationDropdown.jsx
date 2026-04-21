@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   getNotifications,
   markAsRead,
@@ -23,6 +24,7 @@ const typeLabel = {
 const NotificationDropdown = ({ onRead, onClose }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,11 +54,19 @@ const NotificationDropdown = ({ onRead, onClose }) => {
     onRead();
   };
 
+  const goToPreferences = () => {
+      navigate('/notification-preferences');
+      onClose();
+  };
+
   return (
     <div className="notif-dropdown" id="notification-dropdown">
       <div className="notif-header">
         <span>Notifications</span>
-        <button className="close-btn" onClick={onClose}>✕</button>
+        <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+          <button className="settings-btn" onClick={goToPreferences} title="Notification Preferences" style={{background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem'}}>⚙️</button>
+          <button className="close-btn" onClick={onClose}>✕</button>
+        </div>
       </div>
 
       {loading && <p className="notif-empty">Loading…</p>}
