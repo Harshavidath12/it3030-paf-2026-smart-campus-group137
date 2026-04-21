@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import NotificationPanel from './pages/NotificationPanel';
+import NotificationPreferences from './pages/NotificationPreferences';
 import HomePage from './pages/HomePage';
 import AboutUs from './pages/AboutUs';
 import AdminDashboard from './pages/AdminDashboard';
@@ -84,6 +85,14 @@ const AppContent = () => {
         element={
           <ProtectedRoute>
             <NotificationPanel />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notification-preferences"
+        element={
+          <ProtectedRoute>
+            <NotificationPreferences />
           </ProtectedRoute>
         }
       />

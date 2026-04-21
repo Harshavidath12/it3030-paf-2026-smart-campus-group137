@@ -10,6 +10,7 @@ import LoginPage          from './pages/LoginPage';
 import RegisterPage       from './pages/RegisterPage';
 import OAuthCallbackPage  from './pages/OAuthCallbackPage';
 import NotificationPanel  from './pages/NotificationPanel';
+import NotificationPreferences from './pages/NotificationPreferences';
 import ProtectedRoute     from './components/ProtectedRoute';
 
 import HomePage           from './pages/HomePage';
@@ -46,6 +47,14 @@ function App() {
           element={
             <ProtectedRoute>
               <NotificationPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notification-preferences"
+          element={
+            <ProtectedRoute>
+              <NotificationPreferences />
             </ProtectedRoute>
           }
         />
