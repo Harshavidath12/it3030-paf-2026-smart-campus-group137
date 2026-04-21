@@ -31,3 +31,17 @@ export const markAsRead = async (id) => {
 export const deleteNotification = async (id) => {
   await axios.delete(`${API_URL}/${id}`, authHeader());
 };
+
+const PREFS_API_URL = 'http://localhost:8084/api/notification-preferences';
+
+/** Get notification preferences for the current user. */
+export const getNotificationPreferences = async () => {
+  const res = await axios.get(PREFS_API_URL, authHeader());
+  return res.data;
+};
+
+/** Update notification preferences for the current user. */
+export const updateNotificationPreferences = async (preferences) => {
+  const res = await axios.put(PREFS_API_URL, preferences, authHeader());
+  return res.data;
+};
