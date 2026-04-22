@@ -9,10 +9,12 @@ const AdminBookingsPage = () => {
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
             <Box mb={4}>
+                <Box display="flex" alignItems="center" mb={1} sx={{ cursor: 'pointer', color: 'text.secondary', '&:hover': { color: 'text.primary' } }} onClick={() => navigate('/admin-dashboard')}>
+                    <Typography variant="body2" sx={{ mr: 1, fontSize: '1.2rem', lineHeight: 1 }}>←</Typography>
+                    <Typography variant="body2" fontWeight="500">Back</Typography>
+                </Box>
                 <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 1 }}>
-                    <Link underline="hover" color="inherit" sx={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-                        Smart Campus
-                    </Link>
+                    <Typography color="inherit">Smart Campus</Typography>
                     <Typography color="text.primary">Admin Console</Typography>
                 </Breadcrumbs>
                 <Typography variant="h4" fontWeight="800" sx={{ 
