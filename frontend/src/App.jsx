@@ -30,6 +30,7 @@ import ResourceDiscoveryPage from './pages/resource/ResourceDiscoveryPage';
 import ResourceDetailPage from './pages/resource/ResourceDetailPage';
 import AdminResourceDashboard from './pages/resource/AdminResourceDashboard';
 
+import TicketHandlePage from './pages/TicketHandlePage';
 const BookingLayout = ({ children }) => (
   <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
     <GlobalNavbar />
@@ -141,6 +142,14 @@ const AppContent = () => {
             <BookingLayout>
               <AdminBookingsPage />
             </BookingLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/tickets"
+        element={
+          <ProtectedRoute>
+            <TicketHandlePage />
           </ProtectedRoute>
         }
       />

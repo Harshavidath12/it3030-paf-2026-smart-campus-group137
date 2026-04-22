@@ -76,15 +76,32 @@ public class TicketService {
         }
 
         if (request.getAssigneeId() != null) {
+            // Check if we are assigning a new technician. Auto-update status if it's currently OPEN.
+            boolean isNewAssignment = ticket.getAssigneeId() == null || !ticket.getAssigneeId().equals(request.getAssigneeId());
             ticket.setAssigneeId(request.getAssigneeId());
 
+            // Auto-update to IN_PROGRESS if a technician is assigned and the ticket is still OPEN
+            if (ticket.getStatus() == TicketStatus.OPEN) {
+                ticket.setStatus(TicketStatus.IN_PROGRESS);
+                
+                // Notify Creator of automatic status change
+                NotificationRequest statusNotifReq = new NotificationRequest();
+                statusNotifReq.setUserId(ticket.getCreatorId());
+                statusNotifReq.setMessage("Your ticket for " + ticket.getResourceName() + " is now: " + ticket.getStatus());
+                statusNotifReq.setType(NotificationType.TICKET_UPDATE);
+                statusNotifReq.setReferenceId(ticket.getId());
+                notificationService.createNotification(statusNotifReq);
+            }
+
             // Notify Assignee
-            NotificationRequest notifReq = new NotificationRequest();
-            notifReq.setUserId(request.getAssigneeId());
-            notifReq.setMessage("You have been assigned to a new ticket: " + ticket.getResourceName());
-            notifReq.setType(NotificationType.TICKET_UPDATE);
-            notifReq.setReferenceId(ticket.getId());
-            notificationService.createNotification(notifReq);
+            if (isNewAssignment) {
+                NotificationRequest notifReq = new NotificationRequest();
+                notifReq.setUserId(request.getAssigneeId());
+                notifReq.setMessage("You have been assigned to a new ticket: " + ticket.getResourceName());
+                notifReq.setType(NotificationType.TICKET_UPDATE);
+                notifReq.setReferenceId(ticket.getId());
+                notificationService.createNotification(notifReq);
+            }
         }
 
         return mapToResponse(ticketRepository.save(ticket));

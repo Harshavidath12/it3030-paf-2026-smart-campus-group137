@@ -174,6 +174,16 @@ const AdminDashboard = () => {
             >
               ⚙️ Manage Facilities & Assets
             </button>
+            <button 
+              onClick={() => navigate('/admin/tickets')}
+              style={{
+                background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', 
+                border: '1px solid #ef4444', padding: '10px 20px', 
+                borderRadius: '8px', cursor: 'pointer', fontWeight: '600'
+              }}
+            >
+              🎟️ Handle Tickets
+            </button>
           </div>
         </div>
 
