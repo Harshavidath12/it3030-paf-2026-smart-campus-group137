@@ -27,3 +27,25 @@ export const deleteTicket = async (id) => {
   const response = await axios.delete(`${API_URL}/${id}`, authHeader());
   return response.data;
 };
+
+// Comment Service endpoints
+export const getCommentsByTicket = async (ticketId) => {
+  const response = await axios.get(`${API_URL}/${ticketId}/comments`, authHeader());
+  return response.data;
+};
+
+export const addComment = async (ticketId, content) => {
+  const response = await axios.post(`${API_URL}/${ticketId}/comments`, { content }, authHeader());
+  return response.data;
+};
+
+export const updateComment = async (ticketId, commentId, content) => {
+  const response = await axios.put(`${API_URL}/${ticketId}/comments/${commentId}`, { content }, authHeader());
+  return response.data;
+};
+
+export const deleteComment = async (ticketId, commentId) => {
+  const response = await axios.delete(`${API_URL}/${ticketId}/comments/${commentId}`, authHeader());
+  return response.data;
+};
+
