@@ -95,9 +95,6 @@ const AdminDashboard = () => {
           <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
             Smart Campus - Admin
           </div>
-          <span onClick={() => navigate('/contact')} className="nav-link-text">
-            Contact Us
-          </span>
         </div>
 
         <div
