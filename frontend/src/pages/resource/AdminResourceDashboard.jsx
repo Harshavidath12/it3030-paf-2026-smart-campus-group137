@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   getAllResources,
   createResource,
@@ -10,6 +11,7 @@ import './ResourceDiscoveryPage.css';
 
 import FacilityImage from '../../components/FacilityImage';
 const AdminResourceDashboard = () => {
+  const navigate = useNavigate();
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -147,6 +149,10 @@ const AdminResourceDashboard = () => {
   return (
     <div className="admin-dashboard-wrapper" style={{ position: 'relative' }}>
       <div style={{ padding: '0 40px 30px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginBottom: '10px', color: '#64748b' }} onClick={() => navigate('/admin-dashboard')}>
+          <span style={{ marginRight: '5px', fontSize: '1.1rem', lineHeight: 1 }}>←</span>
+          <span style={{ fontWeight: '500' }}>Back</span>
+        </div>
         <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '8px', fontWeight: '500' }}>
           Smart Campus / Admin Console
         </p>
