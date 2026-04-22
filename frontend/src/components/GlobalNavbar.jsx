@@ -14,6 +14,7 @@ const GlobalNavbar = ({ isDarkMode = false, customUser }) => {
   };
 
   const isBookingMode = ['/my-bookings', '/book', '/scanner', '/admin/bookings', '/admin/resources'].some(path => location.pathname.startsWith(path));
+  const isAdminPage = ['/admin/bookings', '/admin/resources'].some(path => location.pathname.startsWith(path));
 
   const navLinkClass = "nav-link-text";
 
@@ -35,41 +36,52 @@ const GlobalNavbar = ({ isDarkMode = false, customUser }) => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)', cursor: 'pointer' }} onClick={() => navigate('/')}>
-          Smart Campus
-        </div>
-        <span onClick={() => navigate('/resources')} className={navLinkClass}>
-          Explore Catalogue
-        </span>
-        <span onClick={() => navigate('/my-bookings')} className={navLinkClass}>
-          Booking Facility
-        </span>
-        <span onClick={() => navigate('/contact')} className={navLinkClass}>
-          Contact Us
-        </span>
-        <span onClick={() => navigate('/my-tickets')} className={navLinkClass}>
-          My Tickets
-        </span>
-        <span onClick={() => navigate('/about')} className={navLinkClass}>
-          About Us
-        </span>
+        {isAdminPage ? (
+          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)' }}>
+            Smart Campus
+          </div>
+        ) : (
+          <div style={{ fontSize: '1.25rem', fontWeight: 'bold', transform: 'translateY(-2px)', cursor: 'pointer' }} onClick={() => navigate('/')}>
+            Smart Campus
+          </div>
+        )}
         
-        {isBookingMode && (
+        {!isAdminPage && (
           <>
-            <span onClick={() => navigate('/book')} className={navLinkClass}>
-              New Booking
+            <span onClick={() => navigate('/resources')} className={navLinkClass}>
+              Explore Catalogue
             </span>
-            <span onClick={() => navigate('/scanner')} className={navLinkClass}>
-              QR Check-in
+            <span onClick={() => navigate('/my-bookings')} className={navLinkClass}>
+              Booking Facility
             </span>
-            {(user?.role === 'ADMIN' || user?.role === 'MANAGER') && (
+            <span onClick={() => navigate('/contact')} className={navLinkClass}>
+              Contact Us
+            </span>
+            <span onClick={() => navigate('/my-tickets')} className={navLinkClass}>
+              My Tickets
+            </span>
+            <span onClick={() => navigate('/about')} className={navLinkClass}>
+              About Us
+            </span>
+            
+            {isBookingMode && (
               <>
-                <span onClick={() => navigate('/admin/bookings')} className={navLinkClass}>
-                  Booking Management
+                <span onClick={() => navigate('/book')} className={navLinkClass}>
+                  New Booking
                 </span>
-                <span onClick={() => navigate('/admin/resources')} className={navLinkClass}>
-                  Resource Catalogue
+                <span onClick={() => navigate('/scanner')} className={navLinkClass}>
+                  QR Check-in
                 </span>
+                {(user?.role === 'ADMIN' || user?.role === 'MANAGER') && (
+                  <>
+                    <span onClick={() => navigate('/admin/bookings')} className={navLinkClass}>
+                      Booking Management
+                    </span>
+                    <span onClick={() => navigate('/admin/resources')} className={navLinkClass}>
+                      Resource Catalogue
+                    </span>
+                  </>
+                )}
               </>
             )}
           </>
