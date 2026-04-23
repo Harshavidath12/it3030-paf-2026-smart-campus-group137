@@ -8,6 +8,8 @@ import com.group137.smartcampus.backend.entity.User;
 import com.group137.smartcampus.backend.repository.CommentRepository;
 import com.group137.smartcampus.backend.repository.TicketRepository;
 import com.group137.smartcampus.backend.repository.UserRepository;
+import com.group137.smartcampus.backend.dto.NotificationRequest;
+import com.group137.smartcampus.backend.entity.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
+    private final NotificationService notificationService;
 
     public CommentResponse addComment(Long ticketId, CommentRequest request) {
         User currentUser = getCurrentUser();
@@ -36,7 +39,19 @@ public class CommentService {
                 .content(request.getContent())
                 .build();
 
-        return mapToResponse(commentRepository.save(comment));
+        Comment savedComment = commentRepository.save(comment);
+
+        // Notify the ticket creator if the commenter is not the creator
+        if (!ticket.getCreatorId().equals(currentUser.getId())) {
+            NotificationRequest notifReq = new NotificationRequest();
+            notifReq.setUserId(ticket.getCreatorId());
+            notifReq.setMessage("A new comment has been added to your ticket on resource: " + ticket.getResourceName());
+            notifReq.setType(NotificationType.COMMENT);
+            notifReq.setReferenceId(ticketId);
+            notificationService.createNotification(notifReq);
+        }
+
+        return mapToResponse(savedComment);
     }
 
     public List<CommentResponse> getCommentsByTicketId(Long ticketId) {
