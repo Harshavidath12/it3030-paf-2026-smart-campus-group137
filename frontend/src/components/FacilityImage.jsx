@@ -20,7 +20,9 @@ const FacilityImage = ({ res, fallbackEmoji, bgClass, height = '250px' }) => {
   else if (lowerName.includes('boardroom') || lowerName.includes('room')) fileName = 'room.jpg';
   else fileName = `${lowerName.replace(/[^a-z0-9]/g, '-')}.jpg`;
 
-  const imageUrl = `/facilities/${fileName}`;
+  const imageUrl = res.metadata && res.metadata.startsWith('data:image') 
+    ? res.metadata 
+    : `/facilities/${fileName}`;
 
   if (error) {
     return (

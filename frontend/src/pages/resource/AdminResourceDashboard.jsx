@@ -7,8 +7,11 @@ import {
   deleteResource
 } from '../../services/resourceService';
 import './ResourceDiscoveryPage.css';
+import { toast } from 'react-toastify';
 
 import FacilityImage from '../../components/FacilityImage';
+import UsageAnalytics from '../../components/UsageAnalytics';
+
 const AdminResourceDashboard = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,6 +35,7 @@ const AdminResourceDashboard = () => {
   const [typeFilter, setTypeFilter] = useState('');
   const [buildingFilter, setBuildingFilter] = useState('');
   const [saving, setSaving] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   useEffect(() => {
     fetchResources();
@@ -70,31 +74,38 @@ const AdminResourceDashboard = () => {
     if (window.confirm("Are you sure you want to delete this resource?")) {
       try {
         await deleteResource(id);
-        alert('Resource deleted successfully!');
+        toast.success('Resource deleted successfully!');
         fetchResources();
       } catch (err) { 
         console.error(err); 
-        alert(err.response?.data?.message || 'Failed to delete resource.');
+        toast.error(err.response?.data?.message || 'Failed to delete resource.');
       }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validation: Image Upload required for new resources
+    if (!isEditMode && (!formData.metadata || !formData.metadata.startsWith('data:image'))) {
+      toast.error('Please upload an image for the new resource!');
+      return;
+    }
+
     setSaving(true);
     try {
       if (isEditMode) {
         await updateResource(currentId, formData);
-        alert('Resource updated successfully!');
+        toast.success(`Resource "${formData.name}" updated successfully!`);
       } else {
         await createResource(formData);
-        alert('New resource registered successfully!');
+        toast.success(`New resource "${formData.name}" registered successfully!`);
       }
       setShowModal(false);
       fetchResources();
     } catch (err) { 
       console.error(err); 
-      alert(err.response?.data?.message || 'Failed to save resource. Please check if you are logged in as admin.');
+      toast.error(err.response?.data?.message || 'Failed to save resource. Please check if you are logged in as admin.');
     } finally {
       setSaving(false);
     }
@@ -108,7 +119,7 @@ const AdminResourceDashboard = () => {
       padding: '20px'
     },
     container: {
-      background: 'white', padding: '60px 70px', borderRadius: '60px',
+      background: 'white', padding: '50px 70px', borderRadius: '50px',
       width: '90%', maxWidth: '850px', boxShadow: '0 40px 100px rgba(0,0,0,0.2)',
       position: 'relative', overflow: 'hidden'
     },
@@ -120,27 +131,27 @@ const AdminResourceDashboard = () => {
       display: 'grid', gridTemplateColumns: '1fr 1fr', 
       columnGap: '40px', rowGap: '20px' 
     },
-    fieldRow: { display: 'flex', alignItems: 'center', gap: '12px', width: '100%', overflow: 'hidden' },
+    fieldRow: { display: 'flex', alignItems: 'center', gap: '15px', width: '100%', overflow: 'hidden' },
     label: { 
-      width: '110px', fontSize: '0.9rem', fontWeight: '700', 
+      width: '130px', fontSize: '0.9rem', fontWeight: '700', 
       color: '#475569', whiteSpace: 'nowrap', flexShrink: 0
     },
     input: {
-      flex: 1, padding: '14px 20px', borderRadius: '999px',
+      flex: 1, padding: '16px 24px', borderRadius: '999px',
       border: '1px solid #f1f5f9', background: '#f8fafc',
       fontSize: '0.95rem', outline: 'none', color: '#1e1b4b',
       fontWeight: '600', transition: 'all 0.3s', minWidth: 0
     },
     submitBtn: {
-      flex: 1, padding: '20px', borderRadius: '15px', border: 'none',
+      flex: 1, padding: '18px', borderRadius: '15px', border: 'none',
       background: '#007bff', color: 'white', fontWeight: '800', 
-      cursor: 'pointer', fontSize: '1.1rem', boxShadow: '0 10px 20px rgba(0,123,255,0.2)',
+      cursor: 'pointer', fontSize: '1.2rem', boxShadow: '0 10px 20px rgba(0,123,255,0.2)',
       transition: 'all 0.3s'
     },
     discardBtn: {
-      flex: 1, padding: '20px', borderRadius: '15px', border: '1px solid #f1f5f9',
+      flex: 1, padding: '18px', borderRadius: '15px', border: '1px solid #f1f5f9',
       background: 'white', color: '#64748b', fontWeight: '800', 
-      cursor: 'pointer', fontSize: '1.1rem', transition: 'all 0.3s'
+      cursor: 'pointer', fontSize: '1.2rem', transition: 'all 0.3s'
     }
   };
 
@@ -156,6 +167,40 @@ const AdminResourceDashboard = () => {
       </div>
 
       <button className="premium-add-btn" style={{ position: 'absolute', top: '40px', right: '40px', zIndex: 10 }} onClick={handleOpenAdd}>+</button>
+
+      <button 
+        style={{ 
+            position: 'absolute', 
+            top: '40px', 
+            right: '120px', 
+            zIndex: 10,
+            background: showAnalytics ? 'linear-gradient(135deg, #e0e7ff, #ede9fe)' : 'white',
+            color: showAnalytics ? '#4f46e5' : '#64748b',
+            border: '1px solid #e2e8f0',
+            padding: '16px 24px',
+            borderRadius: '16px',
+            fontWeight: '700',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            transition: 'all 0.3s'
+        }} 
+        onClick={() => setShowAnalytics(!showAnalytics)}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
+      </button>
+
+      {showAnalytics && (
+        <div style={{ padding: '0 40px' }}>
+          <UsageAnalytics resources={resources} />
+        </div>
+      )}
 
       <div className="smart-search-zone">
         <div className="search-input-box">
@@ -239,52 +284,113 @@ const AdminResourceDashboard = () => {
             </h2>
             <form onSubmit={handleSubmit}>
               <div style={modalStyles.formGrid}>
-                {/* Resource Name - Full Width Row */}
+                {/* Row 1: Resource Name - Full Width */}
                 <div style={{ gridColumn: '1 / -1', ...modalStyles.fieldRow }}>
                   <label style={modalStyles.label}>Resource Name</label>
-                  <input required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} style={modalStyles.input} />
+                  <input 
+                    required 
+                    value={formData.name} 
+                    onChange={e => setFormData({ ...formData, name: e.target.value })} 
+                    style={modalStyles.input} 
+                    placeholder="Enter resource name"
+                  />
                 </div>
                 
-                {/* Second Row */}
+                {/* Row 2: Type & Building */}
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Type</label>
-                  <input required placeholder="e.g. Laboratory" value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })} style={modalStyles.input} />
+                  <input 
+                    required 
+                    placeholder="e.g. Laboratory" 
+                    value={formData.type} 
+                    onChange={e => setFormData({ ...formData, type: e.target.value })} 
+                    style={modalStyles.input} 
+                  />
                 </div>
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Building</label>
-                  <input required placeholder="Block C" value={formData.building || ''} onChange={e => setFormData({ ...formData, building: e.target.value })} style={modalStyles.input} />
+                  <input 
+                    required 
+                    placeholder="Block C" 
+                    value={formData.building || ''} 
+                    onChange={e => setFormData({ ...formData, building: e.target.value })} 
+                    style={modalStyles.input} 
+                  />
                 </div>
 
-                {/* Third Row */}
+                {/* Row 3: Floor & Room Number */}
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Floor</label>
-                  <input required placeholder="2nd Floor" value={formData.floor || ''} onChange={e => setFormData({ ...formData, floor: e.target.value })} style={modalStyles.input} />
+                  <input 
+                    required 
+                    placeholder="2nd Floor" 
+                    value={formData.floor || ''} 
+                    onChange={e => setFormData({ ...formData, floor: e.target.value })} 
+                    style={modalStyles.input} 
+                  />
                 </div>
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Room Number</label>
-                  <input required placeholder="Lab 301" value={formData.roomNumber || ''} onChange={e => setFormData({ ...formData, roomNumber: e.target.value })} style={modalStyles.input} />
+                  <input 
+                    required 
+                    placeholder="Lab 301" 
+                    value={formData.roomNumber || ''} 
+                    onChange={e => setFormData({ ...formData, roomNumber: e.target.value })} 
+                    style={modalStyles.input} 
+                  />
                 </div>
 
-                {/* Fourth Row */}
+                {/* Row 4: Category & Max Capacity */}
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Category</label>
-                  <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} style={modalStyles.input}>
+                  <select 
+                    value={formData.category} 
+                    onChange={e => setFormData({ ...formData, category: e.target.value })} 
+                    style={{...modalStyles.input, cursor: 'pointer'}}
+                  >
                     <option value="FACILITY">Facility</option>
                     <option value="ASSET">Asset</option>
                   </select>
                 </div>
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Max Capacity</label>
-                  <input type="number" value={formData.capacity} onChange={e => setFormData({ ...formData, capacity: parseInt(e.target.value) || 0 })} style={modalStyles.input} />
+                  <input 
+                    type="number" 
+                    value={formData.capacity} 
+                    onChange={e => setFormData({ ...formData, capacity: parseInt(e.target.value) || 0 })} 
+                    style={modalStyles.input} 
+                  />
                 </div>
 
-                {/* Fifth Row */}
+                {/* Row 5: Status & Upload Image */}
                 <div style={modalStyles.fieldRow}>
                   <label style={modalStyles.label}>Status</label>
-                  <select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })} style={modalStyles.input}>
+                  <select 
+                    value={formData.status} 
+                    onChange={e => setFormData({ ...formData, status: e.target.value })} 
+                    style={{...modalStyles.input, cursor: 'pointer'}}
+                  >
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="OUT_OF_SERVICE">OUT OF SERVICE</option>
+                    <option value="IN_MAINTENANCE">IN MAINTENANCE</option>
                   </select>
+                </div>
+                <div style={modalStyles.fieldRow}>
+                  <label style={modalStyles.label}>Upload Image</label>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    required={!isEditMode}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => setFormData({ ...formData, metadata: reader.result });
+                        reader.readAsDataURL(file);
+                      }
+                    }} 
+                    style={{...modalStyles.input, padding: '12px 24px'}} 
+                  />
                 </div>
               </div>
 

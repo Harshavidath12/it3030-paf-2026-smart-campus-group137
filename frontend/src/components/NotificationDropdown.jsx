@@ -19,6 +19,10 @@ const typeLabel = {
   TICKET_UPDATE:     '🔧 Ticket Update',
   COMMENT:           '💬 Comment',
   GENERAL:           'ℹ️ General',
+  RESOURCE_ACTION:   '🏢 Resource Action',
+  RESOURCE_CREATED:  '🆕 Resource Registered',
+  RESOURCE_UPDATED:  '📝 Resource Updated',
+  RESOURCE_DELETED:  '🗑️ Resource Deleted',
 };
 
 const NotificationDropdown = ({ onRead, onClose }) => {

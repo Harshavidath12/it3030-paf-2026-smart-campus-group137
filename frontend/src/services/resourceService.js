@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { getToken } from './authService';
 
 const API_URL = 'http://localhost:8084/api/resources';
 
 // Helper to get auth header
 const getAuthHeader = () => {
-  const token = localStorage.getItem('token');
+  const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
