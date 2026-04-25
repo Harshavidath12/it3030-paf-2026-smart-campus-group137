@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMe, logout, getAllUsers, adminCreateUser } from '../services/authService';
+import { getMe, logout, getAllUsers, adminCreateUser, adminDeleteUser } from '../services/authService';
 import './AuthPages.css';
 
 const AdminDashboard = () => {
@@ -51,6 +51,18 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     logout();
     navigate('/login', { replace: true });
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      try {
+        await adminDeleteUser(userId);
+        fetchUsersList();
+      } catch (err) {
+        console.error('Failed to delete user', err);
+        alert('Failed to delete user.');
+      }
+    }
   };
 
   const handleAddSubmit = async (e) => {
@@ -267,6 +279,7 @@ const AdminDashboard = () => {
                   <th style={{ padding: '14px 16px', color: 'var(--text-header)', fontWeight: '600', letterSpacing: '0.5px' }}>Name</th>
                   <th style={{ padding: '14px 16px', color: 'var(--text-header)', fontWeight: '600', letterSpacing: '0.5px' }}>Email</th>
                   <th style={{ padding: '14px 16px', color: 'var(--text-header)', fontWeight: '600', letterSpacing: '0.5px' }}>Role</th>
+                  <th style={{ padding: '14px 16px', color: 'var(--text-header)', fontWeight: '600', letterSpacing: '0.5px', textAlign: 'center' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -323,6 +336,31 @@ const AdminDashboard = () => {
                         >
                           {u.role}
                         </span>
+                      </td>
+                      <td style={{ padding: '14px 16px', textAlign: 'center' }}>
+                        {u.id !== user?.id && (
+                          <button
+                            onClick={() => handleDeleteUser(u.id)}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              color: '#ef4444',
+                              cursor: 'pointer',
+                              fontSize: '1.2rem',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              padding: '6px',
+                              borderRadius: '6px',
+                              transition: 'background 0.2s',
+                            }}
+                            title="Delete User"
+                            onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)')}
+                            onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                          >
+                            🗑️
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

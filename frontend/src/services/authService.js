@@ -75,3 +75,8 @@ export const adminCreateUser = async (name, email, password, role) => {
   );
   return roleRes.data;
 };
+
+export const adminDeleteUser = async (userId) => {
+  const res = await axios.delete(`http://localhost:8084/api/users/${userId}`, authHeader());
+  return res.data;
+};
