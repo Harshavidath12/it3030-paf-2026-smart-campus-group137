@@ -24,7 +24,7 @@ const NotificationBell = () => {
 
   useEffect(() => {
     fetchUnread();
-    const interval = setInterval(fetchUnread, 30000); // poll every 30 s
+    const interval = setInterval(fetchUnread, 5000); // poll every 5 s
     return () => clearInterval(interval);
   }, []);
 

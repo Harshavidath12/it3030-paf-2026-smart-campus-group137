@@ -137,7 +137,7 @@ const BookingForm = () => {
                 ) : (
                   resources.map(res => (
                     <MenuItem key={res.id} value={res.id.toString()}>
-                      {res.id}
+                      {res.id} - {res.name}
                     </MenuItem>
                   ))
                 )}

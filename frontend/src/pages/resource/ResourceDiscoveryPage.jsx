@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAllResources, createResource } from '../../services/resourceService';
 import { getMe, logout } from '../../services/authService';
@@ -75,6 +76,7 @@ const ResourceDiscoveryPage = () => {
     e.preventDefault();
     try {
       await createResource(formData);
+      toast.success(`New resource "${formData.name}" registered successfully!`);
       setShowModal(false);
       fetchResources();
       setFormData({
@@ -82,6 +84,7 @@ const ResourceDiscoveryPage = () => {
         building: 'Main Building', floor: '', roomNumber: '', status: 'ACTIVE', description: '', metadata: ''
       });
     } catch (err) {
+      toast.error("Failed to register resource.");
       console.error("Failed to create resource", err);
     }
   };
