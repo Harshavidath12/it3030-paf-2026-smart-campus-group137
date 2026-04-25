@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getMyTickets, deleteTicket, getCommentsByTicket, addComment, updateComment, deleteComment } from '../services/ticketService';
 import { getMe, logout } from '../services/authService';
 import GlobalNavbar from '../components/GlobalNavbar';
+import { getSlaInfo } from '../components/SlaUtils';
 
 const TicketCard = ({ ticket, onDelete, statusColor, currentUser }) => {
   const [showComments, setShowComments] = useState(false);
@@ -97,6 +98,25 @@ const TicketCard = ({ ticket, onDelete, statusColor, currentUser }) => {
       <p style={{ margin: '0 0 10px 0', fontSize: '0.95rem', color: '#475569', lineHeight: '1.5' }}>
         {ticket.description}
       </p>
+
+      {/* SLA Resolution Progress */}
+      {ticket.status !== 'REJECTED' && (() => {
+        const sla = getSlaInfo(ticket);
+        const isResolved = ticket.status === 'RESOLVED' || ticket.status === 'CLOSED';
+        return (
+          <div style={{ marginBottom: '10px', padding: '12px', background: isResolved ? 'rgba(16,185,129,0.06)' : sla.breached ? 'rgba(239,68,68,0.06)' : 'rgba(0,0,0,0.02)', borderRadius: '8px', border: `1px solid ${sla.color}30` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: '700', color: sla.color }}>
+                {isResolved ? '✅ Resolved' : sla.breached ? '🔴 Overdue' : sla.pct < 25 ? '🟡 Due Soon' : '🟢 In Progress'}
+              </span>
+              <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{sla.label}</span>
+            </div>
+            <div style={{ height: '5px', borderRadius: '4px', background: 'rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${isResolved ? 100 : sla.pct}%`, background: sla.color, borderRadius: '4px', transition: 'width 1s linear' }} />
+            </div>
+          </div>
+        );
+      })()}
       
       {ticket.imagesBase64 && ticket.imagesBase64.length > 0 && (
         <div style={{ marginTop: '10px' }}>

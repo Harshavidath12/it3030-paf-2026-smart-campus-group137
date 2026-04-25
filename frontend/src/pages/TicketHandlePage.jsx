@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getMe, logout, getAllUsers } from '../services/authService';
 import { getAllTickets, updateTicket } from '../services/ticketService';
 import { toast } from 'react-toastify';
+import { computeSlaCompliance, getSlaInfo, SLA_HOURS } from '../components/SlaUtils';
 
 const TicketHandlePage = () => {
   const navigate = useNavigate();
@@ -168,6 +169,49 @@ const TicketHandlePage = () => {
           <h1 style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '10px' }}>All Tickets</h1>
           <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>Administer all student-created tickets and assign them to technicians.</p>
         </div>
+
+        {/* SLA Compliance Widget */}
+        {(() => {
+          const compliance = computeSlaCompliance(tickets);
+          const open = tickets.filter(t => t.status === 'OPEN').length;
+          const inProgress = tickets.filter(t => t.status === 'IN_PROGRESS').length;
+          const breached = tickets.filter(t => {
+            if (t.status === 'RESOLVED' || t.status === 'CLOSED' || t.status === 'REJECTED') return false;
+            return getSlaInfo(t).breached;
+          }).length;
+          return (
+            <div style={{ width: '100%', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: '200px', background: 'var(--bg-card)', borderRadius: '14px', padding: '20px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-md)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>SLA Compliance Rate</div>
+                {compliance === null ? (
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No resolved tickets yet</div>
+                ) : (
+                  <>
+                    <div style={{ fontSize: '2.2rem', fontWeight: '800', color: compliance >= 80 ? '#10b981' : compliance >= 50 ? '#f59e0b' : '#ef4444' }}>
+                      {compliance}%
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '4px' }}>of tickets resolved on time</div>
+                    <div style={{ marginTop: '10px', height: '6px', borderRadius: '4px', background: 'rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${compliance}%`, background: compliance >= 80 ? '#10b981' : compliance >= 50 ? '#f59e0b' : '#ef4444', borderRadius: '4px' }} />
+                    </div>
+                  </>
+                )}
+              </div>
+              <div style={{ flex: 1, minWidth: '140px', background: 'var(--bg-card)', borderRadius: '14px', padding: '20px', border: '1px solid rgba(59,130,246,0.3)', boxShadow: 'var(--shadow-md)' }}>
+                <div style={{ fontSize: '0.8rem', color: '#3b82f6', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Open</div>
+                <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#3b82f6' }}>{open}</div>
+              </div>
+              <div style={{ flex: 1, minWidth: '140px', background: 'var(--bg-card)', borderRadius: '14px', padding: '20px', border: '1px solid rgba(245,158,11,0.3)', boxShadow: 'var(--shadow-md)' }}>
+                <div style={{ fontSize: '0.8rem', color: '#f59e0b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>In Progress</div>
+                <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#f59e0b' }}>{inProgress}</div>
+              </div>
+              <div style={{ flex: 1, minWidth: '140px', background: 'var(--bg-card)', borderRadius: '14px', padding: '20px', border: '1px solid rgba(239,68,68,0.3)', boxShadow: 'var(--shadow-md)' }}>
+                <div style={{ fontSize: '0.8rem', color: '#ef4444', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>SLA Breached</div>
+                <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#ef4444' }}>{breached}</div>
+              </div>
+            </div>
+          );
+        })()}
 
         <div style={{
           width: '100%',
