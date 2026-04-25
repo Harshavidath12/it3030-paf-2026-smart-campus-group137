@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authHeader } from './authService';
 
-const API_URL = 'http://localhost:8084/api/tickets';
+const API_URL = 'http://localhost:8085/api/tickets';
 
 export const createTicket = async (ticketData) => {
   const response = await axios.post(API_URL, ticketData, authHeader());

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getStoredUser } from './authService';
 
-const API_URL = 'http://localhost:8084/api/bookings/admin';
+const API_URL = 'http://localhost:8085/api/bookings/admin';
 
 const adminHeaders = () => {
   const user = getStoredUser();

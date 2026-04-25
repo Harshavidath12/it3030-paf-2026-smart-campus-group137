@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken } from './authService';
 
-const API_URL = 'http://localhost:8084/api/resources';
+const API_URL = 'http://localhost:8085/api/resources';
 
 // Helper to get auth header
 const getAuthHeader = () => {

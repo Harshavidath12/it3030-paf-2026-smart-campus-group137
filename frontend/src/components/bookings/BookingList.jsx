@@ -16,7 +16,7 @@ const BookingList = () => {
       const data = await getMyBookings();
       setBookings(data);
     } catch (err) {
-      setError('Failed to fetch bookings. Make sure the backend is running on port 8084.');
+      setError('Failed to fetch bookings. Make sure the backend is running on port 8085.');
     } finally {
       setLoading(false);
     }

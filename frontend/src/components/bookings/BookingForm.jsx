@@ -78,7 +78,7 @@ const BookingForm = () => {
           setError(data.message || 'Validation error');
         }
       } else {
-        setError('Failed to create booking. Make sure the backend is running on port 8084.');
+        setError('Failed to create booking. Make sure the backend is running on port 8085.');
       }
     } finally {
       setLoading(false);

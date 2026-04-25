@@ -7,7 +7,7 @@
 import axios from 'axios';
 import { authHeader } from './authService';
 
-const API_URL = 'http://localhost:8084/api/notifications';
+const API_URL = 'http://localhost:8085/api/notifications';
 
 /** Get all notifications for the current user (newest first). */
 export const getNotifications = async () => {
@@ -32,7 +32,7 @@ export const deleteNotification = async (id) => {
   await axios.delete(`${API_URL}/${id}`, authHeader());
 };
 
-const PREFS_API_URL = 'http://localhost:8084/api/notification-preferences';
+const PREFS_API_URL = 'http://localhost:8085/api/notification-preferences';
 
 /** Get notification preferences for the current user. */
 export const getNotificationPreferences = async () => {
