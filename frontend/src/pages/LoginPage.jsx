@@ -46,7 +46,7 @@ const LoginPage = () => {
 
         {error && <div className="auth-error">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form" autoComplete="off">
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -57,6 +57,7 @@ const LoginPage = () => {
               placeholder="you@example.com"
               value={form.email}
               onChange={handleChange}
+              autoComplete="off"
             />
           </div>
 
@@ -70,6 +71,7 @@ const LoginPage = () => {
               placeholder="••••••••"
               value={form.password}
               onChange={handleChange}
+              autoComplete="new-password"
             />
           </div>
 

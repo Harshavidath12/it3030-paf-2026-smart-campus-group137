@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8085/api/auth';
+const API_URL = 'http://localhost:8084/api/auth';
 const TOKEN_KEY = 'smartcampus_token';
 const USER_KEY = 'smartcampus_user';
 
@@ -56,11 +56,11 @@ export const logout = () => {
 };
 
 export const loginWithGoogle = () => {
-  window.location.href = 'http://localhost:8085/oauth2/authorization/google';
+  window.location.href = 'http://localhost:8084/oauth2/authorization/google';
 };
 
 export const getAllUsers = async () => {
-  const res = await axios.get('http://localhost:8085/api/users/roles', authHeader());
+  const res = await axios.get('http://localhost:8084/api/users/roles', authHeader());
   return res.data;
 };
 
@@ -69,7 +69,7 @@ export const adminCreateUser = async (name, email, password, role) => {
   const newUserId = regRes.data.userId;
 
   const roleRes = await axios.put(
-    `http://localhost:8085/api/users/${newUserId}/role`,
+    `http://localhost:8084/api/users/${newUserId}/role`,
     { role },
     authHeader()
   );
@@ -77,6 +77,6 @@ export const adminCreateUser = async (name, email, password, role) => {
 };
 
 export const adminDeleteUser = async (userId) => {
-  const res = await axios.delete(`http://localhost:8085/api/users/${userId}`, authHeader());
+  const res = await axios.delete(`http://localhost:8084/api/users/${userId}`, authHeader());
   return res.data;
 };
