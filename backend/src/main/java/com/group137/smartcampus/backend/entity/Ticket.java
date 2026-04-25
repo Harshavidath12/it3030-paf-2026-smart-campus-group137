@@ -62,6 +62,8 @@ public class Ticket {
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    private LocalDateTime resolvedAt;
+
     @PreUpdate
     public void setLastUpdate() {
         this.updatedAt = LocalDateTime.now();
