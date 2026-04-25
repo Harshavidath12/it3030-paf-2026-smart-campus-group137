@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getMe, logout } from '../services/authService';
 import { getAllTickets, updateTicket, getCommentsByTicket, addComment, updateComment, deleteComment } from '../services/ticketService';
 import { toast } from 'react-toastify';
+import { getSlaInfo } from '../components/SlaUtils';
 
 const TechnicianDashboard = () => {
   const navigate = useNavigate();
@@ -254,6 +255,29 @@ const TechnicianDashboard = () => {
                       <span><strong>Creator:</strong> {ticket.creatorName}</span>
                       <span><strong>Date:</strong> {new Date(ticket.createdAt).toLocaleDateString()}</span>
                     </div>
+                    {/* SLA Time Remaining Bar */}
+                    {(() => {
+                      const sla = getSlaInfo(ticket);
+                      return ticket.status !== 'RESOLVED' && ticket.status !== 'CLOSED' && ticket.status !== 'REJECTED' ? (
+                        <div style={{ marginTop: '12px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', marginBottom: '5px' }}>
+                            <span style={{ fontWeight: '600', color: sla.color }}>
+                              {sla.breached ? '🔴 SLA BREACHED' : !sla.started ? '⏳ Awaiting Assignment' : sla.pct < 25 ? '🟡 Warning' : '🟢 On Track'}
+                            </span>
+                            <span style={{ color: 'var(--text-muted)' }}>{sla.label}</span>
+                          </div>
+                          <div style={{ height: '6px', borderRadius: '4px', background: 'rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+                            <div style={{
+                              height: '100%',
+                              width: `${sla.pct}%`,
+                              background: sla.color,
+                              borderRadius: '4px',
+                              transition: 'width 1s linear'
+                            }} />
+                          </div>
+                        </div>
+                      ) : null;
+                    })()}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
                     <span style={{ 

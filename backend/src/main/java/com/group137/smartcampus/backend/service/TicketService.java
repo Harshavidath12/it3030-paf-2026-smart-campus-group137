@@ -65,6 +65,9 @@ public class TicketService {
 
         if (request.getStatus() != null) {
             ticket.setStatus(request.getStatus());
+            if (request.getStatus() == TicketStatus.RESOLVED && ticket.getResolvedAt() == null) {
+                ticket.setResolvedAt(java.time.LocalDateTime.now());
+            }
             
             // Notify Creator of status change
             NotificationRequest notifReq = new NotificationRequest();
@@ -149,6 +152,7 @@ public class TicketService {
                 .assigneeName(assigneeName)
                 .createdAt(ticket.getCreatedAt())
                 .updatedAt(ticket.getUpdatedAt())
+                .resolvedAt(ticket.getResolvedAt())
                 .build();
     }
 }

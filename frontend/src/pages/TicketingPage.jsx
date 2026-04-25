@@ -2,24 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createTicket, getMyTickets } from '../services/ticketService';
 import { getMe, logout } from '../services/authService';
+import { getAllResources } from '../services/resourceService';
 import GlobalNavbar from '../components/GlobalNavbar';
-
-const RESOURCES = [
-  "Room A101",
-  "Room B205",
-  "Auditorium",
-  "Lab 1",
-  "Projector #3",
-  "Network Switch D",
-  "HVAC System Wing A"
-];
 
 const TicketingPage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
+  const [resources, setResources] = useState([]);
+
   // Form State
-  const [resource, setResource] = useState(RESOURCES[0]);
+  const [resource, setResource] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('LOW');
   const [contactNumber, setContactNumber] = useState('');
@@ -40,6 +33,14 @@ const TicketingPage = () => {
         } else {
           console.error("Failed to fetch user:", err);
         }
+      }
+      try {
+        const data = await getAllResources();
+        const list = Array.isArray(data) ? data : (data.content || []);
+        setResources(list);
+        if (list.length > 0) setResource(list[0].name);
+      } catch (err) {
+        console.error("Failed to fetch resources:", err);
       }
     };
     init();
@@ -97,7 +98,7 @@ const TicketingPage = () => {
         imagesBase64: images.length > 0 ? images : null
       });
       // Reset form
-      setResource(RESOURCES[0]);
+      setResource(resources.length > 0 ? resources[0].name : '');
       setDescription('');
       setPriority('LOW');
       setContactNumber('');
@@ -163,7 +164,7 @@ const TicketingPage = () => {
                 onChange={(e) => setResource(e.target.value)}
                 style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#fff' }}
               >
-                {RESOURCES.map(r => <option key={r} value={r}>{r}</option>)}
+                {resources.map(r => <option key={r.id} value={r.name}>{r.name}</option>)}
               </select>
             </div>
 
