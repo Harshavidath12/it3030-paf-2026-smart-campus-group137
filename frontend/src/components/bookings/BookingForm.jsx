@@ -164,8 +164,10 @@ const BookingForm = () => {
           {/* Row 2: Start and End Time - Now standard dropdowns */}
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth required>
-              <InputLabel>Start Time</InputLabel>
+              <InputLabel id="start-time-label">Start Time</InputLabel>
               <Select
+                labelId="start-time-label"
+                id="start-time-select"
                 name="startTime"
                 value={formData.startTime}
                 label="Start Time"
@@ -182,8 +184,10 @@ const BookingForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth required>
-              <InputLabel>End Time</InputLabel>
+              <InputLabel id="end-time-label">End Time</InputLabel>
               <Select
+                labelId="end-time-label"
+                id="end-time-select"
                 name="endTime"
                 value={formData.endTime}
                 label="End Time"
