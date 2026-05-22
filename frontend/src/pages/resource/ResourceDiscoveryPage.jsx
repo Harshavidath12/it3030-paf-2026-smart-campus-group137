@@ -225,18 +225,20 @@ const ResourceDiscoveryPage = () => {
                       <span className={`status-pill ${res.status === 'ACTIVE' ? 'available' : 'out-of-service'}`}>
                         {res.status === 'ACTIVE' ? '🟢 AVAILABLE' : '🛑 OUT OF SERVICE'}
                       </span>
-                      {res.status === 'ACTIVE' && (
-                        <button
-                          className="quick-book-btn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/book?resourceId=${res.id}`);
-                          }}
-                        >
-                          Book Now
-                        </button>
-                      )}
-                      <span className="resource-id">#ID-{res.id}</span>
+                      <div className="footer-actions">
+                        {res.status === 'ACTIVE' && (
+                          <button
+                            className="quick-book-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/book?resourceId=${res.id}`);
+                            }}
+                          >
+                            Book Now
+                          </button>
+                        )}
+                        <span className="resource-id">#ID-{res.id}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
