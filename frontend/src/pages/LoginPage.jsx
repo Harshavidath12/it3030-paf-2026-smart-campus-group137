@@ -40,6 +40,12 @@ const LoginPage = () => {
 
   return (
     <div className="auth-container">
+      {/* Dynamic Ambient Background Motion Theme */}
+      <div className="ambient-orb orb-1"></div>
+      <div className="ambient-orb orb-2"></div>
+      <div className="ambient-orb orb-3"></div>
+      <div className="ambient-orb orb-4"></div>
+
       <div className="auth-card">
         <h1 className="auth-title">Smart Campus</h1>
         <h2 className="auth-subtitle">Sign in to your account</h2>
